@@ -1,26 +1,71 @@
 export default function Footer() {
   return (
-    <footer className="bg-[#060A14] py-12">
-      <div className="max-w-6xl mx-auto px-6 lg:px-10">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
-                <span className="text-[#0B1120] font-bold text-[10px]">BS</span>
-              </div>
-              <span className="font-bold text-white">BIG STAR</span>
-            </div>
-            <p className="text-sm text-gray-400">Infrastructure for AI&apos;s future</p>
+    <footer className="section-dark">
+      <div className="container">
+        <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+          {/* BIGSTAR Wordmark */}
+          <div style={{ 
+            fontFamily: 'var(--font-serif)', 
+            fontSize: '24px', 
+            fontWeight: '800', 
+            color: 'rgba(248, 250, 252, 0.6)',
+            textTransform: 'uppercase',
+            letterSpacing: '-0.5px',
+            marginBottom: '32px'
+          }}>
+            BIGSTAR
           </div>
-          <div className="flex gap-6 text-sm text-gray-500">
-            <span>Reg D 506(c)</span>
-            <span>Accredited Only</span>
-            <span>Private Placement</span>
+
+          {/* Regulatory Disclaimer */}
+          <div style={{ marginBottom: '40px' }}>
+            <p style={{ 
+              fontFamily: 'var(--font-sans)', 
+              fontSize: '14px', 
+              color: 'var(--text-light-secondary)',
+              lineHeight: '1.6',
+              marginBottom: '16px'
+            }}>
+              This is not an offer to sell or solicitation to buy securities. Securities are
+              offered only to accredited investors under Regulation D, Rule 506(c) of the
+              Securities Act of 1933, as amended. Prospective investors must verify their
+              accredited investor status. Past performance is not indicative of future results.
+              All investments involve risk, including potential loss of principal.
+            </p>
+            <p style={{ 
+              fontFamily: 'var(--font-sans)', 
+              fontSize: '12px', 
+              color: 'var(--slate)',
+              marginBottom: '8px'
+            }}>
+              BSLA, LLC is a wholly-owned subsidiary of BigStar Blockchain Inc.
+              Securities offered through BSLA, LLC.
+            </p>
           </div>
-        </div>
-        <div className="border-t border-white/5 pt-6">
-          <p className="text-xs text-gray-500 mb-2">&copy; 2026 Big Star Land Acquisition LLC. All rights reserved.</p>
-          <p className="text-xs text-gray-500">Securities offered under Regulation D, Rule 506(c). Past performance does not guarantee future results. Investment involves substantial risk of loss.</p>
+
+          {/* Footer Badges */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: '16px', 
+            marginBottom: '40px',
+            flexWrap: 'wrap'
+          }}>
+            <div className="badge badge-gold">SEC Regulation D</div>
+            <div className="badge badge-gold">Rule 506(c)</div>
+            <div className="badge badge-gold">Accredited Only</div>
+            <div className="badge badge-gold">Private Placement</div>
+          </div>
+
+          {/* Copyright */}
+          <div style={{ 
+            borderTop: '1px solid var(--border-dark)', 
+            paddingTop: '24px',
+            fontFamily: 'var(--font-sans)',
+            fontSize: '12px',
+            color: 'var(--slate)'
+          }}>
+            © 2026 BigStar Blockchain Inc. All rights reserved.
+          </div>
         </div>
       </div>
     </footer>

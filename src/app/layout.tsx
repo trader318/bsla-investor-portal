@@ -1,20 +1,34 @@
 import type { Metadata } from "next";
-import { Inter, DM_Mono, DM_Serif_Display } from "next/font/google";
+import { Fraunces, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", weight: ["400", "500", "600", "700"] });
-const dmMono = DM_Mono({ subsets: ["latin"], variable: "--font-dm-mono", weight: ["400", "500"] });
-const dmSerif = DM_Serif_Display({ subsets: ["latin"], variable: "--font-dm-serif", weight: ["400"] });
+const fraunces = Fraunces({ 
+  subsets: ["latin"], 
+  variable: "--font-fraunces"
+});
+
+const dmSans = DM_Sans({ 
+  subsets: ["latin"], 
+  variable: "--font-dm-sans", 
+  weight: ["300", "400", "500", "600", "700"] 
+});
+
+const jetBrainsMono = JetBrains_Mono({ 
+  subsets: ["latin"], 
+  variable: "--font-jetbrains-mono", 
+  weight: ["400", "500", "600"] 
+});
 
 export const metadata: Metadata = {
   title: "BSLA Investment Opportunity | Big Star Land Acquisition",
-  description: "Invest in power-ready data center sites. Accredited investors only.",
+  description: "Power-ready sites for AI data centers — operational in months, not years. Accredited investors only.",
+  keywords: "data center, AI infrastructure, power sites, investment opportunity, accredited investors",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${dmMono.variable} ${dmSerif.variable} font-sans antialiased bg-white text-gray-900`}>
+      <body className={`${fraunces.variable} ${dmSans.variable} ${jetBrainsMono.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
