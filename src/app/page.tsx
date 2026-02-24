@@ -28,7 +28,7 @@ export default function HomePage() {
   return (
     <>
       {/* Nav */}
-      <nav>
+      <nav className="nav--p0-mobilefix">
         <div className="nav-inner">
           <a href="#" className="nav-wm">
             <span className="nav-wm-top">BIGSTAR</span>
@@ -42,7 +42,7 @@ export default function HomePage() {
       </nav>
 
       {/* ===== HERO ===== */}
-      <section className="hero">
+      <section className="hero hero--p0-hotfix-glow">
         <div className="hero-grid"></div>
         <div className="hero-orb"></div>
         <div className="container">
