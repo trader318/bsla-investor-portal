@@ -1,60 +1,33 @@
 export default function Footer() {
   return (
-    <footer className="bg-primary-dark pt-20 pb-10 border-t border-[rgba(255,255,255,0.06)]">
-      <div className="container mx-auto px-8">
-        <div className="text-center max-w-4xl mx-auto">
-          <h3 className="text-2xl font-semibold text-text-primary mb-8">
-            Important Legal Information
-          </h3>
-          
-          <div className="grid gap-6 mb-10 text-left">
-            <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
-              <h4 className="text-text-primary font-semibold mb-3">Accredited Investors Only</h4>
-              <p className="text-text-secondary text-sm leading-relaxed">
-                This investment opportunity is only available to accredited investors as defined by SEC regulations.
-              </p>
+    <footer className="bg-[#060A14] py-12">
+      <div className="max-w-container mx-auto px-10 tablet:px-6 mobile:px-6">
+        <div className="flex justify-between items-start mobile:flex-col mobile:gap-6">
+          {/* Left: Logo + One-liner */}
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-6 h-6 bg-card-white rounded flex items-center justify-center">
+                <span className="text-navy-hero font-bold text-xs">BS</span>
+              </div>
+              <span className="font-bold text-lg text-text-dark-primary">BIG STAR</span>
             </div>
-            
-            <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
-              <h4 className="text-text-primary font-semibold mb-3">Securities Offering</h4>
-              <p className="text-text-secondary text-sm leading-relaxed">
-                Securities offered under Regulation D, Rule 506(c). This offering has not been registered with the Securities and Exchange Commission.
-              </p>
-            </div>
-            
-            <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
-              <h4 className="text-text-primary font-semibold mb-3">Risk Factors</h4>
-              <p className="text-text-secondary text-sm leading-relaxed">
-                This investment involves substantial risks. Please review all risk factors and disclaimers in the Private Placement Memorandum before making any investment decision.
-              </p>
-            </div>
-            
-            <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
-              <h4 className="text-text-primary font-semibold mb-3">No Guarantee</h4>
-              <p className="text-text-secondary text-sm leading-relaxed">
-                Past performance does not guarantee future results. All investments carry the risk of loss, including the potential for total loss of principal.
-              </p>
-            </div>
+            <p className="text-sm text-text-dark-secondary max-w-md">
+              Infrastructure for AI's future
+            </p>
           </div>
           
-          <div className="flex justify-center gap-6 mb-10 flex-wrap">
-            <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.06)] rounded-lg px-5 py-3 text-xs font-semibold uppercase tracking-wide text-text-secondary">
-              SEC Regulation D
-            </div>
-            <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.06)] rounded-lg px-5 py-3 text-xs font-semibold uppercase tracking-wide text-text-secondary">
-              Rule 506(c)
-            </div>
-            <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.06)] rounded-lg px-5 py-3 text-xs font-semibold uppercase tracking-wide text-text-secondary">
-              Accredited Only
-            </div>
-            <div className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.06)] rounded-lg px-5 py-3 text-xs font-semibold uppercase tracking-wide text-text-secondary">
-              Private Placement
-            </div>
+          {/* Right: Legal links row */}
+          <div className="flex gap-6 mobile:gap-4 text-sm">
+            <span className="text-text-dark-secondary">Reg D 506(c)</span>
+            <span className="text-text-dark-secondary">Accredited Only</span>
+            <span className="text-text-dark-secondary">Private Placement</span>
           </div>
-          
-          <div className="border-t border-[rgba(255,255,255,0.06)] pt-8 text-sm text-text-secondary">
-            © 2026 Big Star Land Acquisition LLC. All rights reserved.
-          </div>
+        </div>
+        
+        {/* Bottom: Copyright + disclaimers */}
+        <div className="border-t border-border-dark pt-6 mt-6 text-caption text-[#4B5563]">
+          <p className="mb-2">© 2026 Big Star Land Acquisition LLC. All rights reserved.</p>
+          <p>Securities offered under Regulation D, Rule 506(c). Past performance does not guarantee future results. Investment involves substantial risk of loss.</p>
         </div>
       </div>
     </footer>

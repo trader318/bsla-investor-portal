@@ -19,59 +19,42 @@ export default function Navbar() {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 h-[72px] z-[1000] transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 h-[72px] z-[1000] flex items-center transition-all duration-300 ${
         scrolled 
-          ? 'bg-[rgba(10,10,10,0.95)] backdrop-blur-[20px]' 
-          : 'bg-[rgba(10,10,10,0.8)] backdrop-blur-[20px]'
-      } border-b border-[rgba(255,255,255,0.06)]`}
+          ? 'navbar-glass' 
+          : 'bg-transparent'
+      }`}
     >
-      <div className="container mx-auto px-8 h-full">
-        <div className="flex justify-between items-center h-full">
-          <Link href="/" className="flex items-center gap-3 text-xl font-semibold text-text-primary no-underline tracking-tight">
-            <div className="w-8 h-8 bg-accent-blue rounded-sm flex items-center justify-center">
-              <span className="text-white font-bold text-sm">BS</span>
+      <div className="max-w-container mx-auto w-full px-10 tablet:px-6 mobile:px-6">
+        <div className="flex justify-between items-center">
+          {/* Left: Logo - DESIGN-SYSTEM-V2.md spec */}
+          <Link href="/" className="flex items-center gap-3 text-text-nav no-underline">
+            <div className="w-8 h-8 rounded">
+              {/* Try to use logo.jpg, fallback to text */}
+              <div className="w-8 h-8 bg-card-white rounded flex items-center justify-center">
+                <span className="text-navy-hero font-bold text-sm">BS</span>
+              </div>
             </div>
-            <span className="hidden sm:inline">Big Star Land Acquisition</span>
-            <span className="sm:hidden">BSLA</span>
+            <span className="font-bold text-xl">BIG STAR</span>
           </Link>
           
-          <div className="flex items-center gap-6">
-            <div className="bg-accent-gold text-primary-dark px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide">
+          {/* Right: Badge + CTA Button */}
+          <div className="flex items-center gap-6 mobile:gap-4">
+            {/* "Accredited Investors Only" in caption style */}
+            <div className="text-caption font-medium uppercase text-text-nav tracking-wide mobile:text-xs mobile:hidden tablet:hidden">
               Accredited Investors Only
             </div>
+            
+            {/* Request Access Button - Outline style, rounded-full */}
             <Link 
               href="/accreditation" 
-              className="bg-transparent text-text-primary border border-[rgba(255,255,255,0.06)] px-5 py-2 rounded-sm text-sm font-medium transition-all duration-200 hover:border-accent-blue hover:bg-[rgba(30,136,229,0.1)] no-underline"
+              className="btn-outline"
             >
               Request Access
             </Link>
           </div>
         </div>
       </div>
-      
-      {/* Mobile responsive */}
-      <style jsx>{`
-        @media (max-width: 768px) {
-          nav {
-            height: 60px;
-          }
-          
-          .container > div {
-            flex-direction: column;
-            gap: 12px;
-            padding: 8px 0;
-          }
-          
-          .flex.items-center.gap-6 {
-            gap: 16px;
-          }
-          
-          .bg-accent-gold {
-            font-size: 10px;
-            padding: 4px 8px;
-          }
-        }
-      `}</style>
     </nav>
   );
 }

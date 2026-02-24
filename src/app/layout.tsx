@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, DM_Mono } from "next/font/google";
+import { Inter, DM_Mono, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 
+// DESIGN-SYSTEM-V2.md font imports
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const dmMono = DM_Mono({
   subsets: ["latin"],
   variable: "--font-dm-mono",
   weight: ["400", "500"],
+});
+
+const dmSerif = DM_Serif_Display({
+  subsets: ["latin"],
+  variable: "--font-dm-serif",
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -43,7 +50,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </head>
-      <body className={`${inter.variable} ${dmMono.variable} font-primary text-text-primary bg-primary-dark antialiased`}>
+      <body className={`${inter.variable} ${dmMono.variable} ${dmSerif.variable} font-sans text-text-light-primary bg-light-section antialiased`}>
         {children}
       </body>
     </html>

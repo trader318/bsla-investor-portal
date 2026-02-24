@@ -7,28 +7,36 @@ import { motion, useAnimation, useInView } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-// Animation component for scroll-triggered animations
-function AnimatedSection({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+// DESIGN-SYSTEM-V2.md Animation Component
+function FadeUpSection({ children, className = '', delay = 0 }: { 
+  children: React.ReactNode; 
+  className?: string; 
+  delay?: number;
+}) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const mainControls = useAnimation();
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const controls = useAnimation();
 
   useEffect(() => {
     if (isInView) {
-      mainControls.start('visible');
+      controls.start('visible');
     }
-  }, [isInView, mainControls]);
+  }, [isInView, controls]);
 
   return (
     <motion.div
       ref={ref}
       variants={{
-        hidden: { opacity: 0, y: 40 },
+        hidden: { opacity: 0, y: 24 },
         visible: { opacity: 1, y: 0 }
       }}
       initial="hidden"
-      animate={mainControls}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
+      animate={controls}
+      transition={{ 
+        duration: 0.6, 
+        ease: [0.16, 1, 0.3, 1],
+        delay: delay * 0.1 
+      }}
       className={className}
     >
       {children}
@@ -41,356 +49,350 @@ export default function HomePage() {
     <>
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden">
-        {/* Background Image with Overlay */}
+      {/* Hero Section - Navy Background (#0B1120) */}
+      <section className="section-navy relative min-h-screen flex items-center overflow-hidden">
+        {/* Background Image - 20% opacity as per design spec */}
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80"
-            alt="Server corridor with blue lighting"
+            alt="Data center corridor with blue lighting"
             fill
-            className="object-cover"
+            className="object-cover opacity-20"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-[rgba(10,10,20,0.85)] to-[rgba(15,30,60,0.75)]" />
         </div>
         
-        <div className="container mx-auto px-8 relative z-10">
+        <div className="container relative z-10 py-5xl">
+          {/* Republic-style hero: left-aligned text, 60% width */}
           <motion.div 
-            className="text-center max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 60 }}
+            className="max-w-[640px]"
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="inline-block bg-[rgba(212,168,67,0.15)] text-accent-gold px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider mb-8 border border-[rgba(212,168,67,0.3)]">
-              REGULATION D | RULE 506(c)
+            {/* Eyebrow - Copper accent */}
+            <div className="text-overline mb-6">
+              REGULATION D · RULE 506(c)
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight tracking-tight mb-6 text-text-primary">
+            {/* Headline - DM Serif Display 64px */}
+            <h1 className="text-hero-desktop mobile:text-hero-mobile font-serif text-text-dark-primary mb-6 max-w-[640px]">
               Invest in the Infrastructure Powering AI's Future
             </h1>
             
-            <p className="text-xl leading-normal text-text-secondary mb-12 max-w-3xl mx-auto">
-              Big Star Land Acquisition delivers power-ready sites for data centers and Bitcoin mining — operational in 6-12 months, not 4-7 years.
+            {/* Subtitle - Inter 18px */}
+            <p className="text-body-large text-text-dark-secondary mb-10 max-w-[540px]">
+              Big Star delivers power-ready sites for AI data centers — operational in months, not years.
             </p>
             
-            <motion.div 
-              className="bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.06)] rounded-xl p-8 mb-12 max-w-md mx-auto backdrop-blur-sm"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              <div className="font-mono text-4xl font-medium text-accent-gold mb-2 tracking-tight">
-                $300K → $9M
-              </div>
-              <div className="text-sm text-text-secondary uppercase tracking-wide">
-                Validated Transaction
-              </div>
-            </motion.div>
-            
+            {/* CTA Button - Blue #2563EB */}
             <Link 
               href="/accreditation" 
-              className="btn-primary btn-primary-lg inline-block hover:scale-105 transition-transform duration-200"
+              className="btn-blue btn-blue-md inline-block mb-6"
             >
               Request Deal Room Access
             </Link>
+            
+            {/* Below CTA text */}
+            <p className="text-caption text-caption-dark">
+              Accredited investors only · NDA required
+            </p>
           </motion.div>
         </div>
         
         {/* Scroll Indicator */}
         <motion.div 
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-text-secondary"
-          animate={{ y: [0, -10, 0] }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-text-caption-dark"
+          animate={{ y: [0, -4, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+          <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" className="opacity-60">
             <path d="M7 10l5 5 5-5z"/>
           </svg>
         </motion.div>
       </section>
 
-      {/* Trust Bar */}
-      <section className="bg-secondary-dark border-t border-[rgba(255,255,255,0.06)] border-b border-[rgba(255,255,255,0.06)] py-10">
-        <div className="container mx-auto px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
-            <div className="relative">
-              <div className="font-mono text-3xl font-medium text-text-primary mb-2 leading-none">
-                10-300MW
-              </div>
-              <div className="text-sm text-text-secondary uppercase tracking-wide">
-                Sites
-              </div>
+      {/* Trust/Stats Bar - White Background (#FFFFFF) */}
+      <section className="bg-card-white py-4xl">
+        <div className="container">
+          <FadeUpSection>
+            <div className="grid grid-cols-2 desktop:grid-cols-4 gap-xl max-w-[1000px] mx-auto text-center">
+              {[
+                { number: "10-300MW", label: "Sites Owned" },
+                { number: "$7.5M", label: "Capital Raise" },
+                { number: "6-12 mo", label: "Time to Power" },
+                { number: "30x", label: "Proven Returns" }
+              ].map((stat, index) => (
+                <FadeUpSection key={stat.label} delay={index}>
+                  <div className="relative">
+                    {/* Vertical dividers between stats */}
+                    {index < 3 && (
+                      <div className="hidden desktop:block absolute right-0 top-1/2 transform -translate-y-1/2 w-px h-12 bg-border-light"></div>
+                    )}
+                    <div className="text-stat-desktop mobile:text-stat-mobile font-mono text-text-light-primary">
+                      {stat.number}
+                    </div>
+                    <div className="text-caption font-medium uppercase text-text-light-caption">
+                      {stat.label}
+                    </div>
+                  </div>
+                </FadeUpSection>
+              ))}
             </div>
-            <div className="relative">
-              <div className="font-mono text-3xl font-medium text-text-primary mb-2 leading-none">
-                $7.5M
-              </div>
-              <div className="text-sm text-text-secondary uppercase tracking-wide">
-                Raise
-              </div>
+          </FadeUpSection>
+        </div>
+      </section>
+
+      {/* Problem Section - Light Background (#FAFAFA) */}
+      <section className="section-light py-4xl">
+        <div className="container">
+          <FadeUpSection>
+            {/* Section Header - Centered */}
+            <div className="text-center mb-20 max-w-[640px] mx-auto">
+              <div className="text-overline mb-4">THE OPPORTUNITY</div>
+              <h2 className="text-section-desktop mobile:text-section-mobile font-serif text-text-light-primary mb-6">
+                The Grid Queue Crisis
+              </h2>
+              <p className="text-body-large text-text-light-body">
+                Traditional data center development takes 4-7 years due to grid interconnection delays. AI companies need infrastructure NOW.
+              </p>
             </div>
-            <div className="relative">
-              <div className="font-mono text-3xl font-medium text-text-primary mb-2 leading-none">
-                6-12 Months
-              </div>
-              <div className="text-sm text-text-secondary uppercase tracking-wide">
-                Delivery
-              </div>
+            
+            {/* Two-column layout: text left, image right */}
+            <div className="grid desktop:grid-cols-[55%_45%] gap-20 items-center">
+              <FadeUpSection delay={1} className="desktop:order-1">
+                <div className="space-y-6">
+                  {/* Pain points as white cards */}
+                  <div className="card-light">
+                    <h3 className="text-card-title font-semibold text-text-light-primary mb-3">
+                      Infrastructure Bottleneck
+                    </h3>
+                    <p className="text-body text-text-light-body">
+                      Grid interconnection queues stretch 4-7 years. AI companies can't wait for traditional development cycles.
+                    </p>
+                  </div>
+                  
+                  <div className="card-light">
+                    <h3 className="text-card-title font-semibold text-text-light-primary mb-3">
+                      Explosive Demand
+                    </h3>
+                    <p className="text-body text-text-light-body">
+                      Data center power demand growing 30%+ annually. Supply constraints create massive opportunities.
+                    </p>
+                  </div>
+                  
+                  {/* Key visual comparison */}
+                  <div className="grid grid-cols-2 gap-6 pt-6">
+                    <div className="text-center p-6 bg-red-50 rounded-lg border border-red-100">
+                      <div className="text-3xl font-mono font-medium text-red-600 mb-2">4-7 Years</div>
+                      <div className="text-sm text-red-700">Traditional</div>
+                    </div>
+                    <div className="text-center p-6 bg-green-50 rounded-lg border border-green-100">
+                      <div className="text-3xl font-mono font-medium text-green-metric mb-2">6-12 Months</div>
+                      <div className="text-sm text-green-700">BSLA Platform</div>
+                    </div>
+                  </div>
+                </div>
+              </FadeUpSection>
+              
+              <FadeUpSection delay={2} className="desktop:order-2">
+                <div className="relative rounded-lg overflow-hidden shadow-card-light">
+                  <Image
+                    src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80"
+                    alt="Power infrastructure"
+                    width={800}
+                    height={600}
+                    className="w-full h-[400px] object-cover"
+                  />
+                </div>
+              </FadeUpSection>
             </div>
-            <div className="relative">
-              <div className="font-mono text-3xl font-medium text-text-primary mb-2 leading-none">
-                30x
-              </div>
-              <div className="text-sm text-text-secondary uppercase tracking-wide">
-                Proven Returns
-              </div>
+          </FadeUpSection>
+        </div>
+      </section>
+
+      {/* Solution Section - Warm Background (#F5F0EB) */}
+      <section className="section-warm py-4xl">
+        <div className="container">
+          <FadeUpSection>
+            {/* Centered header */}
+            <div className="text-center mb-20 max-w-[640px] mx-auto">
+              <div className="text-overline mb-4">THE SOLUTION</div>
+              <h2 className="text-section-desktop mobile:text-section-mobile font-serif text-text-light-primary mb-6">
+                Speed-to-Power Platform
+              </h2>
+              <p className="text-body-large text-text-light-body">
+                One partner, zero delays. Complete infrastructure delivery through proprietary utility relationships.
+              </p>
             </div>
+            
+            {/* Three cards in a row */}
+            <div className="grid desktop:grid-cols-3 gap-8 mb-20">
+              {[
+                {
+                  step: "1",
+                  title: "Source & Acquire",
+                  description: "Off-market land parcels at agricultural pricing with power potential. Our network identifies opportunities before they hit the market."
+                },
+                {
+                  step: "2", 
+                  title: "De-Risk & Secure",
+                  description: "Proprietary utility relationships for sub-5¢/kWh power access. We handle all regulatory approvals and grid interconnection challenges."
+                },
+                {
+                  step: "3",
+                  title: "Deliver Solutions", 
+                  description: "Complete data center build services with ongoing operational support. From site preparation to full facility management."
+                }
+              ].map((item, index) => (
+                <FadeUpSection key={item.step} delay={index + 1}>
+                  <div className="card-light text-center">
+                    {/* Step number circle */}
+                    <div className="w-12 h-12 bg-blue-cta text-white rounded-full flex items-center justify-center text-lg font-bold mb-6 mx-auto">
+                      {item.step}
+                    </div>
+                    <h3 className="text-card-title font-semibold text-text-light-primary mb-4">
+                      {item.title}
+                    </h3>
+                    <p className="text-body text-text-light-body">
+                      {item.description}
+                    </p>
+                  </div>
+                </FadeUpSection>
+              ))}
+            </div>
+            
+            {/* Revenue split bar */}
+            <FadeUpSection delay={4}>
+              <div className="card-light max-w-4xl mx-auto text-center">
+                <h3 className="text-xl font-semibold text-text-light-primary mb-8">Split Revenue Model</h3>
+                <div className="grid desktop:grid-cols-2 gap-12">
+                  <div>
+                    <div className="text-4xl font-mono font-medium text-text-light-primary mb-4">30%</div>
+                    <div className="text-lg font-semibold text-text-light-primary mb-2">Site-Only</div>
+                    <div className="text-body text-text-light-body">Quick turnaround for clients handling own construction</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-mono font-medium text-text-light-primary mb-4">70%</div>
+                    <div className="text-lg font-semibold text-text-light-primary mb-2">Complete Build</div>
+                    <div className="text-body text-text-light-body">Higher margins plus recurring revenue from full facility management</div>
+                  </div>
+                </div>
+              </div>
+            </FadeUpSection>
+          </FadeUpSection>
+        </div>
+      </section>
+
+      {/* Investment Terms - Dark Contrast Section (#111827) */}
+      <section className="section-dark-contrast py-4xl">
+        <div className="container">
+          <div className="grid desktop:grid-cols-[45%_55%] gap-20 items-center">
+            <FadeUpSection>
+              <div className="text-overline mb-4">INVESTMENT STRUCTURE</div>
+              <h2 className="text-section-desktop mobile:text-section-mobile font-serif text-text-dark-primary mb-6">
+                Senior Convertible Notes
+              </h2>
+              <p className="text-body-large text-text-dark-secondary">
+                Structured downside protection with upside participation. Priority liquidation ahead of all equity holders.
+              </p>
+            </FadeUpSection>
+            
+            <FadeUpSection delay={1}>
+              <div className="card-dark border-l-4 border-l-copper-accent">
+                {[
+                  { label: "Total Raise", value: "$7.5M", highlight: true },
+                  { label: "Minimum", value: "$50K", highlight: true }, 
+                  { label: "Structure", value: "Senior convertible notes (ahead of all equity)" },
+                  { label: "Returns", value: "25% profit participation + 120% cash return cap + $1.50/share conversion" },
+                  { label: "Eligibility", value: "Accredited investors only" }
+                ].map((row, index, array) => (
+                  <div key={row.label} className={`flex flex-col tablet:flex-row tablet:justify-between tablet:items-center py-4 ${index < array.length - 1 ? 'border-b border-border-dark' : ''}`}>
+                    <span className="text-caption uppercase text-text-caption-dark mb-1 tablet:mb-0">{row.label}</span>
+                    <span className={`text-lg font-semibold tablet:text-right ${row.highlight ? 'text-text-dark-primary' : 'text-text-dark-secondary'}`}>
+                      {row.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </FadeUpSection>
           </div>
         </div>
       </section>
 
-      {/* Problem Section */}
-      <AnimatedSection className="section-padding">
-        <div className="container mx-auto px-8">
-          <div className="grid md:grid-cols-2 gap-20 items-center">
-            <div>
-              <h3 className="text-3xl font-semibold text-text-primary mb-6 relative pb-4">
-                The Grid Queue Crisis
-                <span className="absolute bottom-0 left-0 w-15 h-1 bg-accent-gold rounded"></span>
-              </h3>
-              <p className="text-text-secondary leading-relaxed mb-10">
-                Traditional data center development takes 4-7 years due to grid interconnection delays. AI companies can't wait. Demand is exponential, supply is constrained, creating a $50B opportunity for those who can deliver power infrastructure NOW.
+      {/* Team Section - Light Background (#FAFAFA) */}
+      <section className="section-light py-4xl">
+        <div className="container">
+          <FadeUpSection>
+            <div className="text-center mb-20 max-w-[640px] mx-auto">
+              <div className="text-overline mb-4">LEADERSHIP</div>
+              <h2 className="text-section-desktop mobile:text-section-mobile font-serif text-text-light-primary mb-6">
+                Proven Energy Infrastructure Expertise
+              </h2>
+              <p className="text-body-large text-text-light-body">
+                Deep expertise in land acquisition, power development, and data center infrastructure
               </p>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)] rounded-xl p-8 text-center">
-                  <div className="font-mono text-3xl font-medium mb-2 text-error-red">
-                    4-7 Years
+            </div>
+            
+            <div className="grid desktop:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {[
+                {
+                  initials: "KM",
+                  name: "Kevin Mohan", 
+                  title: "Chief Executive Officer",
+                  bio: "Proven track record in energy infrastructure development with deep utility relationships and regulatory expertise."
+                },
+                {
+                  initials: "MT",
+                  name: "Management Team",
+                  title: "Energy & Infrastructure Experts", 
+                  bio: "Combined decades of experience in land acquisition, power development, and data center infrastructure delivery."
+                }
+              ].map((person, index) => (
+                <FadeUpSection key={person.name} delay={index + 1}>
+                  <div className="card-light text-center">
+                    <div className="w-16 h-16 bg-navy-hero text-white rounded-full flex items-center justify-center text-xl font-serif mb-6 mx-auto">
+                      {person.initials}
+                    </div>
+                    <h4 className="text-card-title font-semibold text-text-light-primary mb-2">
+                      {person.name}
+                    </h4>
+                    <div className="text-sm font-medium text-blue-cta uppercase tracking-wide mb-4">
+                      {person.title}
+                    </div>
+                    <p className="text-body text-text-light-body">
+                      {person.bio}
+                    </p>
                   </div>
-                  <div className="text-text-secondary">Traditional Development</div>
-                </div>
-                <div className="bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)] rounded-xl p-8 text-center">
-                  <div className="font-mono text-3xl font-medium mb-2 text-success-green">
-                    6-12 Months
-                  </div>
-                  <div className="text-text-secondary">BSLA Platform</div>
-                </div>
-              </div>
+                </FadeUpSection>
+              ))}
             </div>
-            
-            <div className="relative rounded-2xl overflow-hidden shadow-card order-first md:order-last">
-              <Image
-                src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80"
-                alt="Power Infrastructure"
-                width={800}
-                height={400}
-                className="w-full h-96 object-cover"
-              />
-            </div>
-          </div>
+          </FadeUpSection>
         </div>
-      </AnimatedSection>
+      </section>
 
-      {/* Solution Section */}
-      <AnimatedSection className="section-padding bg-secondary-dark">
-        <div className="container mx-auto px-8">
-          <div className="text-center mb-20 max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6 text-text-primary">
-              Speed-to-Power Platform
-            </h2>
-            <p className="text-lg text-text-secondary leading-relaxed">
-              One partner, zero delays. Complete data center infrastructure delivered through proprietary utility relationships.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-20">
-            <motion.div 
-              className="premium-card hover:transform hover:-translate-y-1 transition-all duration-300"
-              whileHover={{ y: -4 }}
-            >
-              <div className="text-4xl mb-6">🏗️</div>
-              <h3 className="text-2xl font-semibold text-text-primary mb-4">
-                Source & Acquire
-              </h3>
-              <p className="text-text-secondary leading-relaxed">
-                Off-market land parcels at agricultural pricing with power potential. Our network identifies opportunities before they hit the market.
+      {/* CTA Section - Pre-footer Gradient */}
+      <section className="py-4xl bg-gradient-to-br from-navy-hero to-dark-contrast text-center">
+        <div className="container">
+          <FadeUpSection>
+            <div className="max-w-2xl mx-auto">
+              <h2 className="text-section-desktop mobile:text-section-mobile font-serif text-text-dark-primary mb-6">
+                Ready to Review the Opportunity?
+              </h2>
+              <p className="text-body-large text-text-dark-secondary mb-10">
+                Request access to our private deal room with complete investment materials, financial projections, and due diligence documentation.
               </p>
-            </motion.div>
-            
-            <motion.div 
-              className="premium-card hover:transform hover:-translate-y-1 transition-all duration-300"
-              whileHover={{ y: -4 }}
-            >
-              <div className="text-4xl mb-6">⚡</div>
-              <h3 className="text-2xl font-semibold text-text-primary mb-4">
-                De-Risk & Secure
-              </h3>
-              <p className="text-text-secondary leading-relaxed">
-                Proprietary utility relationships for sub-5¢/kWh power access. We handle all regulatory approvals and grid interconnection challenges.
+              <Link 
+                href="/accreditation" 
+                className="btn-blue btn-blue-lg inline-block mb-6"
+              >
+                Request Deal Room Access
+              </Link>
+              <p className="text-caption text-text-caption-dark">
+                Accredited investors only · All materials under NDA · SEC Reg D 506(c)
               </p>
-            </motion.div>
-            
-            <motion.div 
-              className="premium-card hover:transform hover:-translate-y-1 transition-all duration-300"
-              whileHover={{ y: -4 }}
-            >
-              <div className="text-4xl mb-6">🏢</div>
-              <h3 className="text-2xl font-semibold text-text-primary mb-4">
-                Deliver Solutions
-              </h3>
-              <p className="text-text-secondary leading-relaxed">
-                Complete data center build services with ongoing operational support. From site preparation to full facility management.
-              </p>
-            </motion.div>
-          </div>
-          
-          {/* Revenue Split */}
-          <div className="premium-card max-w-5xl mx-auto relative">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent-gold to-accent-blue"></div>
-            <h3 className="text-center text-3xl font-semibold text-text-primary mb-4">
-              Split Revenue Model
-            </h3>
-            <div className="grid md:grid-cols-2 gap-15 mt-10">
-              <div className="text-center">
-                <div className="font-mono text-6xl font-medium text-accent-blue mb-4 leading-none">
-                  30%
-                </div>
-                <div className="text-xl font-semibold text-text-primary mb-3">
-                  Site-Only Solutions
-                </div>
-                <div className="text-text-secondary leading-normal">
-                  Quick turnaround, proven margins for clients who prefer to handle their own construction
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="font-mono text-6xl font-medium text-accent-blue mb-4 leading-none">
-                  70%
-                </div>
-                <div className="text-xl font-semibold text-text-primary mb-3">
-                  Complete Build Services
-                </div>
-                <div className="text-text-secondary leading-normal">
-                  Higher margins plus recurring revenue from full facility development and management
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </AnimatedSection>
-
-      {/* Investment Terms */}
-      <AnimatedSection className="section-padding">
-        <div className="container mx-auto px-8">
-          <div className="text-center mb-20 max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6 text-text-primary">
-              Senior Convertible Notes — Structured Downside Protection
-            </h2>
-            <p className="text-lg text-text-secondary leading-relaxed">
-              Investment structure designed to provide security and upside participation for accredited investors
-            </p>
-          </div>
-          
-          <div className="premium-card max-w-4xl mx-auto relative">
-            <div className="absolute top-0 left-0 bottom-0 w-1 bg-accent-gold"></div>
-            <div className="bg-[rgba(255,255,255,0.05)] p-8 border-b border-[rgba(255,255,255,0.06)] mb-0">
-              <h3 className="text-2xl font-semibold text-text-primary">Investment Terms</h3>
-            </div>
-            <div className="p-10">
-              <div className="space-y-5">
-                <div className="flex justify-between items-center py-5 border-b border-[rgba(255,255,255,0.06)]">
-                  <span className="font-semibold text-text-primary">Total Raise</span>
-                  <span className="text-accent-gold font-semibold text-right">$7.5M</span>
-                </div>
-                <div className="flex justify-between items-center py-5 border-b border-[rgba(255,255,255,0.06)]">
-                  <span className="font-semibold text-text-primary">Minimum Investment</span>
-                  <span className="text-accent-gold font-semibold text-right">$50K</span>
-                </div>
-                <div className="flex justify-between items-center py-5 border-b border-[rgba(255,255,255,0.06)]">
-                  <span className="font-semibold text-text-primary">Structure</span>
-                  <span className="text-text-secondary text-right">Senior convertible notes (ahead of all equity)</span>
-                </div>
-                <div className="flex justify-between items-center py-5 border-b border-[rgba(255,255,255,0.06)]">
-                  <span className="font-semibold text-text-primary">Returns</span>
-                  <span className="text-text-secondary text-right">25% profit participation + 120% cash return cap + $1.50/share conversion</span>
-                </div>
-                <div className="flex justify-between items-center py-5">
-                  <span className="font-semibold text-text-primary">Eligibility</span>
-                  <span className="text-text-secondary text-right">Accredited investors only</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </AnimatedSection>
-
-      {/* Team Section */}
-      <AnimatedSection className="section-padding bg-secondary-dark">
-        <div className="container mx-auto px-8">
-          <div className="text-center mb-20 max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6 text-text-primary">
-              Proven Leadership in Energy Infrastructure
-            </h2>
-            <p className="text-lg text-text-secondary leading-relaxed">
-              Deep expertise in land acquisition, power development, and data center infrastructure
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-            <motion.div 
-              className="premium-card text-center hover:transform hover:-translate-y-1 transition-all duration-300"
-              whileHover={{ y: -4 }}
-            >
-              <div className="w-20 h-20 rounded-full bg-accent-blue mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white">
-                KM
-              </div>
-              <h4 className="text-xl font-semibold text-text-primary mb-2">Kevin Mohan</h4>
-              <div className="text-sm text-accent-blue font-medium uppercase tracking-wide mb-4">
-                Chief Executive Officer
-              </div>
-              <p className="text-text-secondary leading-relaxed">
-                Proven track record in energy infrastructure development with deep utility relationships and regulatory expertise.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              className="premium-card text-center hover:transform hover:-translate-y-1 transition-all duration-300"
-              whileHover={{ y: -4 }}
-            >
-              <div className="w-20 h-20 rounded-full bg-accent-blue mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white">
-                MT
-              </div>
-              <h4 className="text-xl font-semibold text-text-primary mb-2">Management Team</h4>
-              <div className="text-sm text-accent-blue font-medium uppercase tracking-wide mb-4">
-                Energy & Infrastructure Experts
-              </div>
-              <p className="text-text-secondary leading-relaxed">
-                Combined decades of experience in land acquisition, power development, and data center infrastructure delivery.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </AnimatedSection>
-
-      {/* CTA Section */}
-      <section className="section-padding bg-gradient-to-br from-[rgba(30,136,229,0.1)] to-[rgba(212,168,67,0.1)] border-t border-[rgba(255,255,255,0.06)] border-b border-[rgba(255,255,255,0.06)]">
-        <div className="container mx-auto px-8 text-center">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-6 tracking-tight">
-              Ready to Review the Opportunity?
-            </h2>
-            <p className="text-lg text-text-secondary mb-10 leading-relaxed">
-              Access our complete investment materials, financial projections, and due diligence documentation.
-            </p>
-            <Link 
-              href="/accreditation" 
-              className="btn-primary btn-primary-lg inline-block hover:scale-105 transition-all duration-200"
-            >
-              Request Deal Room Access
-            </Link>
-            <p className="mt-6 text-sm text-text-secondary">
-              Accredited investors only. All materials under NDA.
-            </p>
-          </div>
+          </FadeUpSection>
         </div>
       </section>
 
