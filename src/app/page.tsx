@@ -36,7 +36,7 @@ export default function HomePage() {
             <h1 className="font-serif text-[34px] sm:text-[44px] md:text-[54px] lg:text-[64px] leading-[1.05] text-white mb-8">
               Invest in the Infrastructure Powering AI&apos;s Future
             </h1>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-400 leading-relaxed mb-12 max-w-xl mx-auto lg:mx-0">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-400 leading-relaxed mb-12 max-w-2xl mx-auto lg:mx-0">
               Big Star delivers power-ready sites for AI data centers — operational in months, not years.
             </p>
             <Link href="/accreditation" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-10 py-4 rounded-lg text-base transition-all hover:-translate-y-px hover:shadow-xl">
@@ -69,7 +69,7 @@ export default function HomePage() {
       <section className="bg-gray-50 section-spacer">
         <div className="page-container">
           <FadeUp>
-            <div className="text-center mb-16 sm:mb-20 max-w-xl mx-auto">
+            <div className="text-center mb-16 sm:mb-20 max-w-2xl mx-auto">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-600 mb-5">The Opportunity</p>
               <h2 className="font-serif text-[28px] sm:text-[34px] lg:text-[42px] leading-tight text-gray-900 mb-6">The Grid Queue Crisis</h2>
               <p className="text-base sm:text-lg text-gray-500 leading-relaxed">Traditional data center development takes 4-7 years due to grid interconnection delays. AI companies need infrastructure NOW.</p>
@@ -112,7 +112,7 @@ export default function HomePage() {
       <section className="bg-[#F5F0EB] section-spacer">
         <div className="page-container">
           <FadeUp>
-            <div className="text-center mb-16 sm:mb-20 max-w-xl mx-auto">
+            <div className="text-center mb-16 sm:mb-20 max-w-2xl mx-auto">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-600 mb-5">The Solution</p>
               <h2 className="font-serif text-[28px] sm:text-[34px] lg:text-[42px] leading-tight text-gray-900 mb-6">Speed-to-Power Platform</h2>
               <p className="text-base sm:text-lg text-gray-500 leading-relaxed">One partner, zero delays. Complete infrastructure delivery through proprietary utility relationships.</p>
@@ -136,7 +136,7 @@ export default function HomePage() {
           </div>
 
           <FadeUp delay={4}>
-            <div className="card-centered max-w-3xl mx-auto">
+            <div className="card-centered max-w-4xl mx-auto">
               <h3 className="text-xl font-semibold text-gray-900 mb-12">Split Revenue Model</h3>
               <div className="grid md:grid-cols-2 gap-10 md:divide-x md:divide-gray-200">
                 <div>
@@ -190,12 +190,12 @@ export default function HomePage() {
       <section className="bg-gray-50 section-spacer">
         <div className="page-container">
           <FadeUp>
-            <div className="text-center mb-16 sm:mb-20 max-w-xl mx-auto">
+            <div className="text-center mb-16 sm:mb-20 max-w-2xl mx-auto">
               <p className="text-xs font-semibold tracking-[0.15em] uppercase text-amber-600 mb-5">Leadership</p>
               <h2 className="font-serif text-[28px] sm:text-[34px] lg:text-[42px] leading-tight text-gray-900">Proven Energy Infrastructure Expertise</h2>
             </div>
           </FadeUp>
-          <div className="grid md:grid-cols-2 gap-8 sm:gap-10 max-w-3xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 sm:gap-10 max-w-4xl mx-auto">
             {[
               ['KM','Kevin Mohan','Chief Executive Officer','Proven track record in energy infrastructure development with deep utility relationships and regulatory expertise.'],
               ['MT','Management Team','Energy & Infrastructure Experts','Combined decades of experience in land acquisition, power development, and data center infrastructure delivery.'],
@@ -217,7 +217,7 @@ export default function HomePage() {
       <section className="bg-gradient-to-br from-[#0B1120] to-[#111827] section-spacer text-center">
         <div className="page-container">
           <FadeUp>
-            <div className="max-w-xl mx-auto">
+            <div className="max-w-2xl mx-auto">
               <h2 className="font-serif text-[28px] sm:text-[34px] lg:text-[42px] leading-tight text-white mb-8">Ready to Review the Opportunity?</h2>
               <p className="text-base sm:text-lg text-gray-400 leading-relaxed mb-14">Request access to our private deal room with complete investment materials, financial projections, and due diligence documentation.</p>
               <Link href="/accreditation" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-12 py-5 rounded-xl text-lg transition-all hover:-translate-y-px hover:shadow-xl">
