@@ -106,7 +106,7 @@ export default function HomePage() {
             </div>
             <div className="ts-row">
               <span className="ts-label">Share Price Conversion</span>
-              <span className="ts-val">1:1 into BigStar Shares</span>
+              <span className="ts-val">$1.50/share 1 to 1</span>
             </div>
             <div className="ts-row">
               <span className="ts-label">Eligibility</span>
