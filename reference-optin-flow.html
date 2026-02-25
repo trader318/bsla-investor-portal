@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Deal Room Access — BSLA</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0A0E1A;--navy-light:#111827;--navy-mid:#1A2035;
+  --gold:#C9A54E;--gold-light:#E8D5A0;--gold-dim:rgba(201,165,78,.15);
+  --white:#F8FAFC;--slate:#94A3B8;--slate-light:#CBD5E1;
+  --positive:#34D399;--border-dark:rgba(201,165,78,.08);
+  --text-body:#475569;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 30px rgba(201,165,78,.04)}50%{box-shadow:0 0 60px rgba(201,165,78,.12)}}
+
+/* Nav */
+nav{padding:20px 0;border-bottom:1px solid var(--border-dark)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
+.nav-wm{text-decoration:none;display:flex;flex-direction:column;line-height:1}
+.nav-wm-top{font-family:'Fraunces',serif;font-size:20px;font-weight:800;color:var(--white);text-transform:uppercase;letter-spacing:-.5px}
+.nav-wm-bot{font-family:'Fraunces',serif;font-size:8px;font-weight:500;color:var(--slate-light);text-transform:uppercase;letter-spacing:4.5px}
+.nav-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,165,78,.25);padding:5px 14px}
+
+/* Main layout */
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 48px;position:relative;overflow:hidden}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,165,78,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(201,165,78,.015) 1px,transparent 1px);background-size:80px 80px;pointer-events:none}
+.bg-orb{position:absolute;width:500px;height:500px;border-radius:50%;background:var(--gold);filter:blur(200px);opacity:.03;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+
+/* Gate container */
+.gate{position:relative;z-index:2;width:100%;max-width:520px;animation:fadeUp .6s ease both}
+
+/* Header */
+.gate-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;text-align:center}
+.gate h1{font-family:'Fraunces',serif;font-size:36px;font-weight:800;text-align:center;letter-spacing:-.5px;margin-bottom:8px}
+.gate-sub{font-size:15px;color:var(--slate-light);text-align:center;line-height:1.6;margin-bottom:40px}
+
+/* Progress steps */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:40px}
+.step{display:flex;align-items:center;gap:0}
+.step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;transition:all .4s;border:1px solid rgba(201,165,78,.2);color:var(--slate);background:transparent}
+.step-dot.active{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.step-dot.done{background:var(--positive);color:var(--navy);border-color:var(--positive)}
+.step-line{width:48px;height:1px;background:rgba(201,165,78,.15);margin:0 4px}
+.step-line.active{background:var(--gold)}
+.step-line.done{background:var(--positive)}
+
+/* Form card */
+.form-card{background:rgba(26,32,53,.6);border:1px solid rgba(201,165,78,.1);overflow:hidden;animation:pulse 4s ease-in-out infinite}
+.form-card-bar{height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold))}
+.form-card-header{padding:20px 32px;border-bottom:1px solid var(--border-dark);display:flex;justify-content:space-between;align-items:center}
+.form-card-step{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--slate)}
+.form-card-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--white)}
+.form-body{padding:32px}
+
+/* Form fields */
+.field{margin-bottom:20px}
+.field:last-of-type{margin-bottom:0}
+.field label{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:8px}
+.field label .req{color:var(--gold)}
+.field input,.field select,.field textarea{width:100%;background:rgba(10,14,26,.6);border:1px solid rgba(201,165,78,.1);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 16px;outline:none;transition:all .3s}
+.field input::placeholder,.field textarea::placeholder{color:var(--slate);opacity:.5}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(201,165,78,.4);box-shadow:0 0 0 3px rgba(201,165,78,.08)}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;cursor:pointer}
+.field select option{background:var(--navy);color:var(--white)}
+.field textarea{resize:vertical;min-height:80px}
+
+/* Checkbox */
+.check-field{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
+.check-field input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--gold);cursor:pointer;flex-shrink:0}
+.check-field label{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--slate-light);line-height:1.5;cursor:pointer;letter-spacing:0;text-transform:none}
+
+/* Buttons */
+.form-actions{display:flex;gap:12px;margin-top:28px}
+.btn-p{font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--navy);background:var(--gold);border:none;padding:14px 32px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .3s;flex:1;text-align:center}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,165,78,.3)}
+.btn-back{font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--slate);background:transparent;border:1px solid rgba(148,163,184,.2);padding:14px 24px;cursor:pointer;transition:all .3s;text-align:center}
+.btn-back:hover{border-color:rgba(148,163,184,.4);color:var(--white)}
+
+/* What's inside teaser */
+.inside{margin-top:32px}
+.inside-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:16px;text-align:center}
+.inside-items{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.inside-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid rgba(201,165,78,.06);background:rgba(26,32,53,.3);font-size:12px;color:var(--slate-light)}
+.inside-item .lock{font-size:10px;opacity:.4}
+
+/* Back link */
+.back-link{text-align:center;margin-top:24px}
+.back-link a{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);text-decoration:none;transition:color .3s}
+.back-link a:hover{color:var(--gold)}
+
+/* Footer */
+footer{padding:32px 0;border-top:1px solid var(--border-dark)}
+.ft-inner{max-width:1200px;margin:0 auto;padding:0 48px}
+.ft-disc{font-size:10px;line-height:1.7;color:rgba(148,163,184,.3);max-width:800px}
+.ft-bot{margin-top:16px;display:flex;justify-content:space-between}
+.ft-copy{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(148,163,184,.25)}
+
+/* Step panels */
+.step-panel{display:none}
+.step-panel.active{display:block;animation:fadeUp .4s ease both}
+
+/* Success state */
+.success{text-align:center;padding:48px 32px}
+.success-icon{width:64px;height:64px;border-radius:50%;background:rgba(52,211,153,.1);border:2px solid var(--positive);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:24px}
+.success h3{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:12px}
+.success p{font-size:14px;color:var(--slate-light);line-height:1.6;max-width:360px;margin:0 auto}
+
+@media(max-width:768px){
+  main{padding:40px 24px}
+  .gate h1{font-size:28px}
+  .form-body{padding:24px}
+  .inside-items{grid-template-columns:1fr}
+  .form-actions{flex-direction:column}
+  .nav-inner{padding:0 24px}
+  .ft-inner{padding:0 24px}
+  .nav-badge{display:none}
+  .ft-bot{flex-direction:column;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav — minimal, no escape hatches -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-wm">
+      <span class="nav-wm-top">BIGSTAR</span>
+      <span class="nav-wm-bot">LAND ACQUISITION</span>
+    </a>
+    <span class="nav-badge">Private Placement · Deal Room</span>
+  </div>
+</nav>
+
+<!-- Main -->
+<main>
+  <div class="bg-grid"></div>
+  <div class="bg-orb"></div>
+
+  <div class="gate">
+    <div class="gate-label">Accredited Investors Only</div>
+    <h1>Request Deal Room Access</h1>
+    <p class="gate-sub">Complete verification to access our private placement memorandum, financial projections, and subscription documents.</p>
+
+    <!-- Progress -->
+    <div class="steps">
+      <div class="step">
+        <div class="step-dot active" id="dot1">1</div>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step">
+        <div class="step-dot" id="dot2">2</div>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step">
+        <div class="step-dot" id="dot3">3</div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <div class="form-card-bar"></div>
+
+      <!-- STEP 1: Personal Info -->
+      <div class="step-panel active" id="panel1">
+        <div class="form-card-header">
+          <span class="form-card-step">Step 1 of 3</span>
+          <span class="form-card-title">Personal Information</span>
+        </div>
+        <div class="form-body">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" placeholder="Enter your full name" id="name">
+          </div>
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" placeholder="Enter your email" id="email">
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" placeholder="(555) 000-0000" id="phone">
+          </div>
+          <div class="field">
+            <label>Company / Entity <span style="opacity:.4">(Optional)</span></label>
+            <input type="text" placeholder="Company or entity name" id="company">
+          </div>
+          <div class="form-actions">
+            <button class="btn-p" onclick="goStep(2)">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Accreditation -->
+      <div class="step-panel" id="panel2">
+        <div class="form-card-header">
+          <span class="form-card-step">Step 2 of 3</span>
+          <span class="form-card-title">Accredited Investor Verification</span>
+        </div>
+        <div class="form-body">
+          <div class="field">
+            <label>Accreditation Basis <span class="req">*</span></label>
+            <select id="accred">
+              <option value="" disabled selected>Select your qualification</option>
+              <option>Individual — $200K+ income ($300K+ joint) for 2+ years</option>
+              <option>Individual — $1M+ net worth (excluding primary residence)</option>
+              <option>Entity — $5M+ in assets</option>
+              <option>Licensed Series 7, 65, or 82 holder</option>
+              <option>Family office or family client</option>
+              <option>Qualified institutional buyer</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Investment Range <span class="req">*</span></label>
+            <select id="range">
+              <option value="" disabled selected>Anticipated allocation size</option>
+              <option>$50,000 – $100,000</option>
+              <option>$100,000 – $250,000</option>
+              <option>$250,000 – $500,000</option>
+              <option>$500,000 – $1,000,000</option>
+              <option>$1,000,000+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>How Did You Hear About Us? <span style="opacity:.4">(Optional)</span></label>
+            <select id="source">
+              <option value="" disabled selected>Select source</option>
+              <option>Direct referral</option>
+              <option>Investor event / dinner</option>
+              <option>Online research</option>
+              <option>Professional network</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button class="btn-back" onclick="goStep(1)">Back</button>
+            <button class="btn-p" onclick="goStep(3)">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: NDA & Submit -->
+      <div class="step-panel" id="panel3">
+        <div class="form-card-header">
+          <span class="form-card-step">Step 3 of 3</span>
+          <span class="form-card-title">Agreement & Submission</span>
+        </div>
+        <div class="form-body">
+          <div class="check-field">
+            <input type="checkbox" id="nda">
+            <label for="nda">I acknowledge that the materials in the deal room are confidential and proprietary. I agree to treat all information as strictly confidential and will not share, distribute, or disclose any materials without written consent from BSLA, LLC.</label>
+          </div>
+          <div class="check-field">
+            <input type="checkbox" id="accred-confirm">
+            <label for="accred-confirm">I confirm that I meet the definition of an "accredited investor" as defined in Rule 501 of Regulation D under the Securities Act of 1933, and I understand that verification may be required.</label>
+          </div>
+          <div class="check-field">
+            <input type="checkbox" id="risk">
+            <label for="risk">I understand that all investments carry risk, including the potential loss of principal, and that past performance is not indicative of future results.</label>
+          </div>
+          <div class="field">
+            <label>Questions or Notes <span style="opacity:.4">(Optional)</span></label>
+            <textarea placeholder="Anything you'd like us to know"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="btn-back" onclick="goStep(2)">Back</button>
+            <button class="btn-p" onclick="goStep(4)">Submit Request</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="step-panel" id="panel4">
+        <div class="success">
+          <div class="success-icon">✓</div>
+          <h3>Request Submitted</h3>
+          <p>Click below to get immediate access to the deal room. A private link has also been sent to your email.</p>
+          <a href="#" class="btn-p" style="margin-top:24px;">Enter Deal Room</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's inside -->
+    <div class="inside">
+      <div class="inside-label">What's Inside the Deal Room</div>
+      <div class="inside-items">
+        <div class="inside-item"><span class="lock">🔒</span> Full Term Sheet & Projections</div>
+        <div class="inside-item"><span class="lock">🔒</span> Full Case Study</div>
+        <div class="inside-item"><span class="lock">🔒</span> Site Pipeline Details</div>
+        <div class="inside-item"><span class="lock">🔒</span> Subscription Documents</div>
+      </div>
+    </div>
+
+    <div class="back-link">
+      <a href="/">← Back to Investment Overview</a>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="ft-inner">
+    <p class="ft-disc">This is not an offer to sell or solicitation to buy securities. Securities are offered only to accredited investors under Regulation D, Rule 506(c) of the Securities Act of 1933, as amended. All investments involve risk, including potential loss of principal.</p>
+    <div class="ft-bot">
+      <span class="ft-copy">© 2026 BigStar Blockchain Inc.</span>
+      <span class="ft-copy">BSLA, LLC · Privacy · Terms</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function goStep(n) {
+  // Hide all panels
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  // Show target
+  document.getElementById('panel' + n).classList.add('active');
+
+  // Update dots
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.classList.remove('active', 'done');
+    if (i < n && n <= 4) dot.classList.add('done');
+    else if (i === n) dot.classList.add('active');
+  }
+  // Update lines
+  for (let i = 1; i <= 2; i++) {
+    const line = document.getElementById('line' + i);
+    line.classList.remove('active', 'done');
+    if (i < n - 1) line.classList.add('done');
+    else if (i === n - 1) line.classList.add('active');
+  }
+  // Success state — mark all done
+  if (n === 4) {
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById('dot' + i).classList.add('done');
+      document.getElementById('dot' + i).classList.remove('active');
+    }
+    document.getElementById('line1').classList.add('done');
+    document.getElementById('line2').classList.add('done');
+  }
+
+  // Scroll to top of gate
+  document.querySelector('.gate').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>
