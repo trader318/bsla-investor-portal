@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 
 type DocType = 'pdf' | 'xlsx' | 'docx';
 type CategoryKey = 'all' | 'deck' | 'offering' | 'summary' | 'financial' | 'pipeline' | 'corporate' | 'team' | 'market';
@@ -255,12 +254,10 @@ function DocumentCard({ doc, onTrack }: { doc: DocumentItem; onTrack: (doc: Docu
   );
 }
 
-export default function RoomClient({ token }: { token: string }) {
+export default function RoomClient({ token, investorName }: { token: string; investorName: string }) {
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('all');
   const totalDocs = useMemo(() => categories.reduce((sum, c) => sum + c.documents.length, 0), []);
-  const searchParams = useSearchParams();
   const hasTrackedEntryRef = useRef(false);
-  const ref = searchParams.get('ref') || '';
 
   const sendTracking = (payload: { documentId: string; documentName: string; action: string }) => {
     if (!token) return;
@@ -270,7 +267,6 @@ export default function RoomClient({ token }: { token: string }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         token,
-        ref,
         documentId: payload.documentId,
         documentName: payload.documentName,
         action: payload.action,
@@ -302,7 +298,7 @@ export default function RoomClient({ token }: { token: string }) {
             <div className="dr-topbar-divider" />
             <span className="dr-topbar-label">Private Deal Room</span>
           </div>
-          <div className="dr-topbar-right"><span className="dr-topbar-user">Welcome, <strong>Investor</strong></span><span className="dr-topbar-badge">Verified · Accredited</span></div>
+          <div className="dr-topbar-right"><span className="dr-topbar-user">Welcome, <strong>{investorName}</strong></span><span className="dr-topbar-badge">Verified · Accredited</span></div>
         </div>
 
         <aside className="dr-sidebar">

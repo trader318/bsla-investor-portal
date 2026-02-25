@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
+import { lookupToken } from '@/lib/tokenStore';
 
 export const runtime = 'nodejs';
 
 type TrackPayload = {
   token?: string;
-  ref?: string;
   documentId?: string;
   documentName?: string;
   action?: 'view' | 'download' | 'entered-deal-room' | string;
@@ -27,19 +27,6 @@ const TAG_BY_DOC_ID: Record<string, string> = {
   'wire-instructions': 'activity:viewed-wire-instructions',
   'bsla-term-sheet': 'activity:viewed-term-sheet',
 };
-
-function decodeRef(ref?: string) {
-  if (!ref) return '';
-  try {
-    return Buffer.from(ref, 'base64url').toString('utf8').trim().toLowerCase();
-  } catch {
-    try {
-      return Buffer.from(ref, 'base64').toString('utf8').trim().toLowerCase();
-    } catch {
-      return '';
-    }
-  }
-}
 
 function toCentralTimeLabel(input?: string) {
   const date = input ? new Date(input) : new Date();
@@ -145,21 +132,25 @@ export async function POST(request: Request) {
     const documentId = body.documentId?.trim() || '';
     const documentName = body.documentName?.trim() || 'Document';
     const action = body.action?.trim() || 'view';
-    const email = decodeRef(body.ref);
     const timestampCt = toCentralTimeLabel(body.timestamp);
 
+    const tokenData = token ? await lookupToken(token) : null;
+    const email = tokenData?.email || '';
     const investorIdentifier = email || 'Unknown investor';
 
-    if (email) {
+    let contactId = tokenData?.ghlContactId;
+    if (!contactId && email) {
       const contact = await lookupContactByEmail(email);
-      if (contact?.id) {
-        await addContactNote(contact.id, `${action} ${documentName} — ${timestampCt}`);
+      contactId = contact?.id;
+    }
 
-        const shouldTag = action === 'view' && HIGH_INTENT_DOCS.has(documentId);
-        if (shouldTag) {
-          const tag = TAG_BY_DOC_ID[documentId] || `activity:viewed-${documentId}`;
-          await addContactTags(contact.id, [tag]);
-        }
+    if (contactId) {
+      await addContactNote(contactId, `${action} ${documentName} — ${timestampCt}`);
+
+      const shouldTag = action === 'view' && HIGH_INTENT_DOCS.has(documentId);
+      if (shouldTag) {
+        const tag = TAG_BY_DOC_ID[documentId] || `activity:viewed-${documentId}`;
+        await addContactTags(contactId, [tag]);
       }
     }
 

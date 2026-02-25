@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { issueAccessToken } from '@/lib/accessTokenStore';
+import { storeToken } from '@/lib/tokenStore';
 
 export const runtime = 'nodejs';
 
@@ -31,10 +32,6 @@ function normalizePhone(phone: string) {
 
 function badRequest(code: string, message: string) {
   return NextResponse.json({ ok: false, code, message }, { status: 400 });
-}
-
-function encodeRef(email: string) {
-  return Buffer.from(email, 'utf8').toString('base64url');
 }
 
 function originAllowed(request: Request) {
@@ -184,15 +181,18 @@ export async function POST(request: Request) {
     }
 
     const requestId = randomUUID();
+    const normalizedName = body.name.trim();
+    const normalizedEmail = body.email.trim().toLowerCase();
+    const normalizedPhone = body.phone.trim();
     const idempotencyKey = createHash('sha256')
-      .update(`${body.email.toLowerCase()}|${normalizePhone(body.phone)}|${new Date().toISOString().slice(0, 13)}`)
+      .update(`${normalizedEmail}|${normalizePhone(normalizedPhone)}|${new Date().toISOString().slice(0, 13)}`)
       .digest('hex');
 
     const ghl = await upsertGhlContact({
       ...body,
-      name: body.name.trim(),
-      email: body.email.trim().toLowerCase(),
-      phone: body.phone.trim(),
+      name: normalizedName,
+      email: normalizedEmail,
+      phone: normalizedPhone,
       accreditationBasis: body.accreditationBasis,
       investmentRange: body.investmentRange,
     });
@@ -205,17 +205,25 @@ export async function POST(request: Request) {
     }
 
     const { rawToken, expiresAt } = await issueAccessToken({
-      email: body.email.trim().toLowerCase(),
+      email: normalizedEmail,
       contactId: ghl.ok ? ghl.contactId : undefined,
     });
 
+    await storeToken(rawToken, {
+      email: normalizedEmail,
+      name: normalizedName,
+      phone: normalizedPhone,
+      company: body.company?.trim() || undefined,
+      ghlContactId: ghl.ok ? ghl.contactId : undefined,
+      createdAt: new Date().toISOString(),
+    });
+
     const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_BASE_URL || 'https://bsla-investor-portal.vercel.app';
-    const ref = encodeRef(body.email.trim().toLowerCase());
-    const dealRoomUrl = `${appBaseUrl}/room/${rawToken}?ref=${encodeURIComponent(ref)}`;
+    const dealRoomUrl = `${appBaseUrl}/room/${rawToken}`;
 
     const emailResult = await sendAccessEmail({
-      email: body.email.trim().toLowerCase(),
-      name: body.name.trim(),
+      email: normalizedEmail,
+      name: normalizedName,
       dealRoomUrl,
       expiresAt,
       requestId,
@@ -223,7 +231,7 @@ export async function POST(request: Request) {
 
     console.info('access_submit', {
       requestId,
-      emailMasked: body.email.replace(/(^.).+(@.+$)/, '$1***$2'),
+      emailMasked: normalizedEmail.replace(/(^.).+(@.+$)/, '$1***$2'),
       contactId: ghl.ok ? ghl.contactId ?? null : null,
       emailStatus: emailResult.ok ? 'sent' : 'failed',
       idempotencyKey,
