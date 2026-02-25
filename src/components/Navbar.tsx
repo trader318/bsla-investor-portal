@@ -12,7 +12,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className={scrolled ? 'scrolled' : ''}>
+    <nav className={`site-nav ${scrolled ? 'scrolled' : ''}`.trim()}>
       <div className="nav-inner">
         <Link href="/" className="nav-wordmark">
           BIGSTAR
