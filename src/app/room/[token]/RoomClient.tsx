@@ -1,11 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 type DocType = 'pdf' | 'xlsx' | 'docx';
 type CategoryKey = 'all' | 'deck' | 'offering' | 'summary' | 'financial' | 'pipeline' | 'corporate' | 'team' | 'market';
 
 type DocumentItem = {
+  id: string;
   name: string;
   meta: string;
   type: DocType;
@@ -28,6 +30,7 @@ const categories: Category[] = [
     title: 'Deck',
     documents: [
       {
+        id: 'investor-deck',
         name: 'Big Star Land Acquisition — Investor Deck',
         meta: 'PDF · Final Version',
         type: 'pdf',
@@ -42,6 +45,7 @@ const categories: Category[] = [
     title: 'Offering Documents',
     documents: [
       {
+        id: 'private-placement-memorandum',
         name: 'BSLA, LLC — Private Placement Memorandum',
         meta: 'PDF · Final',
         type: 'pdf',
@@ -49,6 +53,7 @@ const categories: Category[] = [
         downloadHref: '/docs/private-placement-memorandum.pdf',
       },
       {
+        id: 'subscription-agreement',
         name: 'BSLA Subscription Agreement',
         meta: 'PDF · Final',
         type: 'pdf',
@@ -56,6 +61,7 @@ const categories: Category[] = [
         downloadHref: '/docs/subscription-agreement.pdf',
       },
       {
+        id: 'convertible-promissory-note',
         name: 'BSLA Convertible Promissory Note',
         meta: 'PDF · Final',
         type: 'pdf',
@@ -63,6 +69,7 @@ const categories: Category[] = [
         downloadHref: '/docs/convertible-promissory-note.pdf',
       },
       {
+        id: 'operating-agreement-bsla',
         name: 'Operating Agreement — BSLA, LLC',
         meta: 'PDF · Final',
         type: 'pdf',
@@ -70,6 +77,7 @@ const categories: Category[] = [
         downloadHref: '/docs/operating-agreement-bsla.pdf',
       },
       {
+        id: 'wire-instructions',
         name: 'Wire Instructions — BSLA, LLC',
         meta: 'PDF · Final',
         type: 'pdf',
@@ -84,6 +92,7 @@ const categories: Category[] = [
     title: 'Investment Summary',
     documents: [
       {
+        id: 'bsla-term-sheet',
         name: 'BSLA Term Sheet',
         meta: 'PDF · Final',
         type: 'pdf',
@@ -91,6 +100,7 @@ const categories: Category[] = [
         downloadHref: '/docs/bsla-term-sheet.pdf',
       },
       {
+        id: 'investment-summary',
         name: 'Investment Summary — Power-Ready Land for the AI Supercycle',
         meta: 'DOCX · Overview',
         type: 'docx',
@@ -104,12 +114,14 @@ const categories: Category[] = [
     title: 'Financial Model',
     documents: [
       {
+        id: 'financial-model-v11.3',
         name: 'Big Star Land Acquisition Model v11.3',
         meta: 'XLSX · Financial Model',
         type: 'xlsx',
         downloadHref: '/docs/financial-model-v11.3.xlsx',
       },
       {
+        id: 'financial-model-overview',
         name: 'Financial Model Overview for Investors',
         meta: 'DOCX · Narrative Guide',
         type: 'docx',
@@ -123,6 +135,7 @@ const categories: Category[] = [
     title: 'Asset Pipeline',
     documents: [
       {
+        id: 'energy-ready-sites',
         name: 'BSLA — Energy Ready Sites',
         meta: 'PDF · Pipeline Overview',
         type: 'pdf',
@@ -137,6 +150,7 @@ const categories: Category[] = [
     title: 'Corporate Documents',
     documents: [
       {
+        id: 'llc-articles',
         name: 'LLC Articles / Certificate of Organization',
         meta: 'PDF · Formation',
         type: 'pdf',
@@ -144,6 +158,7 @@ const categories: Category[] = [
         downloadHref: '/docs/llc-articles.pdf',
       },
       {
+        id: 'operating-agreement',
         name: 'Operating Agreement — BSLA, LLC',
         meta: 'PDF · Corporate',
         type: 'pdf',
@@ -158,6 +173,7 @@ const categories: Category[] = [
     title: 'Management & Team',
     documents: [
       {
+        id: 'management-team',
         name: 'Management & Leadership Team',
         meta: 'DOCX · Team Bios',
         type: 'docx',
@@ -172,6 +188,7 @@ const categories: Category[] = [
     navTitle: 'Market Validation',
     documents: [
       {
+        id: 'market-validation',
         name: 'BSLA Market Validation',
         meta: 'PDF · Research',
         type: 'pdf',
@@ -182,8 +199,27 @@ const categories: Category[] = [
   },
 ];
 
-function DocumentCard({ doc }: { doc: DocumentItem }) {
+const documentIdToName: Record<string, string> = {
+  'investor-deck': 'Investor Deck',
+  'private-placement-memorandum': 'Private Placement Memorandum',
+  'subscription-agreement': 'Subscription Agreement',
+  'convertible-promissory-note': 'Convertible Promissory Note',
+  'wire-instructions': 'Wire Instructions',
+  'operating-agreement-bsla': 'Operating Agreement',
+  'bsla-term-sheet': 'BSLA Term Sheet',
+  'investment-summary': 'Investment Summary',
+  'financial-model-v11.3': 'Financial Model',
+  'financial-model-overview': 'Financial Model Overview',
+  'energy-ready-sites': 'Energy Ready Sites',
+  'llc-articles': 'LLC Articles',
+  'operating-agreement': 'Operating Agreement',
+  'management-team': 'Management & Leadership Team',
+  'market-validation': 'Market Validation',
+};
+
+function DocumentCard({ doc, onTrack }: { doc: DocumentItem; onTrack: (doc: DocumentItem, action: 'view' | 'download') => void }) {
   const isPdf = doc.type === 'pdf';
+  const canDownload = Boolean(doc.downloadHref) && (!isPdf || doc.id === 'investor-deck');
 
   return (
     <div className="dr-doc-card">
@@ -194,21 +230,68 @@ function DocumentCard({ doc }: { doc: DocumentItem }) {
       </div>
       <div className="dr-doc-actions">
         {isPdf && doc.viewHref && (
-          <a href={doc.viewHref} target="_blank" rel="noopener noreferrer" className="dr-doc-btn dr-doc-btn-view">
+          <a
+            href={doc.viewHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="dr-doc-btn dr-doc-btn-view"
+            onClick={() => onTrack(doc, 'view')}
+          >
             View
           </a>
         )}
-        <a href={doc.downloadHref || '#'} download className="dr-doc-btn dr-doc-btn-dl">
-          Download
-        </a>
+        {canDownload && (
+          <a
+            href={doc.downloadHref}
+            download
+            className="dr-doc-btn dr-doc-btn-dl"
+            onClick={() => onTrack(doc, 'download')}
+          >
+            Download
+          </a>
+        )}
       </div>
     </div>
   );
 }
 
-export default function RoomClient() {
+export default function RoomClient({ token }: { token: string }) {
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('all');
   const totalDocs = useMemo(() => categories.reduce((sum, c) => sum + c.documents.length, 0), []);
+  const searchParams = useSearchParams();
+  const hasTrackedEntryRef = useRef(false);
+  const ref = searchParams.get('ref') || '';
+
+  const sendTracking = (payload: { documentId: string; documentName: string; action: string }) => {
+    if (!token) return;
+
+    fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token,
+        ref,
+        documentId: payload.documentId,
+        documentName: payload.documentName,
+        action: payload.action,
+        timestamp: new Date().toISOString(),
+      }),
+      keepalive: true,
+    }).catch(() => {
+      // fire-and-forget
+    });
+  };
+
+  useEffect(() => {
+    if (hasTrackedEntryRef.current || !token) return;
+    hasTrackedEntryRef.current = true;
+
+    sendTracking({
+      documentId: 'deal-room-entry',
+      documentName: 'Deal Room',
+      action: 'entered-deal-room',
+    });
+  }, [token]);
 
   return (
     <>
@@ -282,7 +365,21 @@ export default function RoomClient() {
                   <span className="dr-cat-block-title">{category.title}</span>
                   <span className="dr-cat-block-count">{category.documents.length} Document{category.documents.length !== 1 ? 's' : ''}</span>
                 </div>
-                <div className="dr-doc-grid">{category.documents.map((doc) => <DocumentCard key={doc.name} doc={doc} />)}</div>
+                <div className="dr-doc-grid">
+                  {category.documents.map((doc) => (
+                    <DocumentCard
+                      key={doc.id}
+                      doc={doc}
+                      onTrack={(clickedDoc, action) =>
+                        sendTracking({
+                          documentId: clickedDoc.id,
+                          documentName: documentIdToName[clickedDoc.id] || clickedDoc.name,
+                          action,
+                        })
+                      }
+                    />
+                  ))}
+                </div>
               </section>
             ))}
           </div>

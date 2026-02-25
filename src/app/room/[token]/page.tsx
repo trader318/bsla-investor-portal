@@ -19,5 +19,5 @@ export default async function RoomPage({ params }: Props) {
     );
   }
 
-  return <RoomClient />;
+  return <RoomClient token={token} />;
 }

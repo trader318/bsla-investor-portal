@@ -33,6 +33,10 @@ function badRequest(code: string, message: string) {
   return NextResponse.json({ ok: false, code, message }, { status: 400 });
 }
 
+function encodeRef(email: string) {
+  return Buffer.from(email, 'utf8').toString('base64url');
+}
+
 function originAllowed(request: Request) {
   const origin = request.headers.get('origin');
   if (!origin) return true;
@@ -206,7 +210,8 @@ export async function POST(request: Request) {
     });
 
     const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_BASE_URL || 'https://bsla-investor-portal.vercel.app';
-    const dealRoomUrl = `${appBaseUrl}/room/${rawToken}`;
+    const ref = encodeRef(body.email.trim().toLowerCase());
+    const dealRoomUrl = `${appBaseUrl}/room/${rawToken}?ref=${encodeURIComponent(ref)}`;
 
     const emailResult = await sendAccessEmail({
       email: body.email.trim().toLowerCase(),
