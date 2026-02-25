@@ -164,7 +164,7 @@ footer{background:var(--navy);padding:48px 0;border-top:1px solid var(--border-d
 .access-step-line{width:48px;height:1px;background:rgba(201,165,78,.15);margin:0 4px}
 .access-step-line.active{background:var(--gold)}
 .access-step-line.done{background:var(--positive)}
-.access-form-card{background:rgba(26,32,53,.6);border:1px solid rgba(201,165,78,.1);overflow:hidden;animation:pulse 4s ease-in-out infinite}
+.access-form-card{background:rgba(26,32,53,.6);border:1px solid rgba(201,165,78,.1);overflow:hidden}
 .access-form-card-bar{height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold))}
 .access-form-card-header{padding:20px 32px;border-bottom:1px solid var(--border-dark);display:flex;justify-content:space-between;align-items:center}
 .access-form-card-step{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--slate)}
