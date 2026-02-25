@@ -15,8 +15,11 @@ export async function storeToken(token: string, data: TokenData) {
 }
 
 export async function lookupToken(token: string): Promise<TokenData | null> {
-  const data = (await kv.get(`token:${token}`)) as string | null;
-  return data ? (JSON.parse(data) as TokenData) : null;
+  const raw = await kv.get(`token:${token}`);
+  if (!raw) return null;
+  // @vercel/kv may return already-parsed object or a string
+  if (typeof raw === 'object') return raw as TokenData;
+  try { return JSON.parse(raw as string) as TokenData; } catch { return null; }
 }
 
 export async function revokeToken(token: string) {
