@@ -110,6 +110,25 @@ async function addContactTags(contactId: string, tags: string[]) {
   });
 }
 
+async function sendSlackMessage(text: string, emoji: string) {
+  const botToken = process.env.SLACK_BOT_TOKEN;
+  if (!botToken) return;
+
+  await fetch('https://slack.com/api/chat.postMessage', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${botToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      channel: 'deal-room-access',
+      text,
+      icon_emoji: emoji,
+      unfurl_links: false,
+    }),
+  }).catch(() => { /* non-blocking */ });
+}
+
 async function sendTelegramMessage(text: string) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   if (!botToken) return { sent: false as const, reason: 'TELEGRAM_BOT_TOKEN_MISSING' as const };
@@ -160,13 +179,17 @@ export async function POST(request: Request) {
     const isHighIntentView = action === 'view' && HIGH_INTENT_DOCS.has(documentId);
 
     if (isEntryEvent) {
+      const msg = `🏦 *DEAL ROOM ENTRY*\n\n${investorIdentifier} just entered the deal room\n\nTime: ${timestampCt}`;
       await sendTelegramMessage(
         `🏦 DEAL ROOM ENTRY\n\n${investorIdentifier} just entered the deal room\n\nTime: ${timestampCt}\nDeal Room: /room/${token}`,
       );
+      await sendSlackMessage(msg, ':door:');
     } else if (isHighIntentView) {
+      const msg = `🔥 *INVESTOR ALERT*\n\n${investorIdentifier} just viewed *${documentName}*\n\nTime: ${timestampCt}`;
       await sendTelegramMessage(
         `🔥 INVESTOR ALERT\n\n${investorIdentifier} just viewed ${documentName}\n\nTime: ${timestampCt}\nDeal Room: /room/${token}`,
       );
+      await sendSlackMessage(msg, ':fire:');
     }
 
     return NextResponse.json({ ok: true });

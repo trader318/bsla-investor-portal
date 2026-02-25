@@ -249,6 +249,21 @@ export async function POST(request: Request) {
       requestId,
     });
 
+    // Slack notification for new opt-in
+    const slackBotToken = process.env.SLACK_BOT_TOKEN;
+    if (slackBotToken) {
+      fetch('https://slack.com/api/chat.postMessage', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${slackBotToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          channel: 'deal-room-access',
+          text: `🆕 *NEW INVESTOR OPT-IN*\n\n*${normalizedName}*\n${normalizedEmail}\n${normalizedPhone}\n${body.company || 'No company'}\n\nRange: ${body.investmentRange}\nAccreditation: ${body.accreditationBasis}\nSource: ${body.source || 'N/A'}`,
+          icon_emoji: ':rocket:',
+          unfurl_links: false,
+        }),
+      }).catch(() => { /* non-blocking */ });
+    }
+
     console.info('access_submit', {
       requestId,
       emailMasked: normalizedEmail.replace(/(^.).+(@.+$)/, '$1***$2'),
