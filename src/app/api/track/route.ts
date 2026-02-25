@@ -193,6 +193,26 @@ export async function POST(request: Request) {
       await sendSlackMessage(`🔥 *INVESTOR ALERT*\n\n${investorBlock}\n\nViewed: *${documentName}*\nTime: ${timestampCt}`, ':fire:');
     }
 
+    // Non-blocking mirror to Mission Control analytics webhook
+    fetch('http://100.96.222.30:3031/api/webhook/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token,
+        email,
+        name: investorName,
+        phone: investorPhone,
+        company: investorCompany,
+        documentId,
+        documentName,
+        action,
+        timestamp: body.timestamp || new Date().toISOString(),
+      }),
+      keepalive: true,
+    }).catch((err) => {
+      console.warn('mission_control_track_forward_failed', err);
+    });
+
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error('track_error', error);

@@ -264,6 +264,30 @@ export async function POST(request: Request) {
       }).catch(() => { /* non-blocking */ });
     }
 
+    // Non-blocking mirror to Mission Control analytics webhook
+    fetch('http://100.96.222.30:3031/api/webhook/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: rawToken,
+        email: normalizedEmail,
+        name: normalizedName,
+        phone: normalizedPhone,
+        company: body.company?.trim() || '',
+        action: 'new-optin',
+        timestamp: new Date().toISOString(),
+        investment_range: body.investmentRange,
+        accreditation_basis: body.accreditationBasis,
+        source: body.source || '',
+        deal_room_url: dealRoomUrl,
+        dealRoomUrl,
+        investmentRange: body.investmentRange,
+      }),
+      keepalive: true,
+    }).catch((err) => {
+      console.warn('mission_control_optin_forward_failed', err);
+    });
+
     console.info('access_submit', {
       requestId,
       emailMasked: normalizedEmail.replace(/(^.).+(@.+$)/, '$1***$2'),
