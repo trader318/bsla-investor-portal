@@ -248,8 +248,8 @@ footer{background:var(--navy);padding:48px 0;border-top:1px solid var(--border-d
 .dr-nav-count{font-family:var(--font-jetbrains-mono),monospace;font-size:9px;color:var(--slate);margin-left:auto;flex-shrink:0}
 
 .dr-contact-card{margin:auto 16px 0;background:rgba(26,32,53,.6);border:1px solid var(--border-dark);overflow:hidden}
-.dr-contact-photo{width:100%;height:140px;object-fit:cover;object-position:center top;display:block;filter:grayscale(.3);background:linear-gradient(130deg,#2b3248,#1a2035);position:relative}
-.dr-contact-photo::after{content:'CR';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-fraunces),serif;font-size:38px;color:rgba(255,255,255,.45)}
+.dr-contact-photo{width:100%;height:140px;display:block;position:relative;overflow:hidden;background:linear-gradient(130deg,#2b3248,#1a2035)}
+.dr-contact-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;filter:grayscale(.3)}
 .dr-contact-body{padding:16px}
 .dr-contact-name{font-family:var(--font-dm-sans),sans-serif;font-size:14px;font-weight:600;color:#FFF;margin-bottom:2px}
 .dr-contact-role{font-family:var(--font-jetbrains-mono),monospace;font-size:8px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}

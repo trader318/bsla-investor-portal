@@ -22,17 +22,52 @@ type Category = {
 };
 
 const categories: Category[] = [
-  { key: 'deck', num: '01', title: 'Deck', documents: [{ name: 'Big Star Land Acquisition — Investor Deck', meta: 'PDF · Final Version', type: 'pdf', viewHref: '#', downloadHref: '#' }] },
+  {
+    key: 'deck',
+    num: '01',
+    title: 'Deck',
+    documents: [{ name: 'Big Star Land Acquisition — Investor Deck', meta: 'PDF · Final Version', type: 'pdf', viewHref: '#', downloadHref: '#' }],
+  },
   {
     key: 'offering',
     num: '02',
     title: 'Offering Documents',
     documents: [
-      { name: 'BSLA, LLC — Private Placement Memorandum', meta: 'PDF · Final', type: 'pdf', viewHref: '#', downloadHref: '#' },
-      { name: 'BSLA Subscription Agreement', meta: 'PDF · Final', type: 'pdf', viewHref: '#', downloadHref: '#' },
-      { name: 'BSLA Convertible Promissory Note', meta: 'PDF · Final', type: 'pdf', viewHref: '#', downloadHref: '#' },
-      { name: 'Operating Agreement — BSLA, LLC', meta: 'PDF · Final', type: 'pdf', viewHref: '#', downloadHref: '#' },
-      { name: 'Wire Instructions — BSLA, LLC', meta: 'PDF · Final', type: 'pdf', viewHref: '#', downloadHref: '#' },
+      {
+        name: 'BSLA, LLC — Private Placement Memorandum',
+        meta: 'PDF · Final',
+        type: 'pdf',
+        viewHref: '/docs/private-placement-memorandum.pdf',
+        downloadHref: '/docs/private-placement-memorandum.pdf',
+      },
+      {
+        name: 'BSLA Subscription Agreement',
+        meta: 'PDF · Final',
+        type: 'pdf',
+        viewHref: '/docs/subscription-agreement.pdf',
+        downloadHref: '/docs/subscription-agreement.pdf',
+      },
+      {
+        name: 'BSLA Convertible Promissory Note',
+        meta: 'PDF · Final',
+        type: 'pdf',
+        viewHref: '/docs/convertible-promissory-note.pdf',
+        downloadHref: '/docs/convertible-promissory-note.pdf',
+      },
+      {
+        name: 'Operating Agreement — BSLA, LLC',
+        meta: 'PDF · Final',
+        type: 'pdf',
+        viewHref: '/docs/operating-agreement-bsla.pdf',
+        downloadHref: '/docs/operating-agreement-bsla.pdf',
+      },
+      {
+        name: 'Wire Instructions — BSLA, LLC',
+        meta: 'PDF · Final',
+        type: 'pdf',
+        viewHref: '/docs/wire-instructions.pdf',
+        downloadHref: '/docs/wire-instructions.pdf',
+      },
     ],
   },
   {
@@ -40,8 +75,19 @@ const categories: Category[] = [
     num: '03',
     title: 'Investment Summary',
     documents: [
-      { name: 'BSLA Term Sheet', meta: 'PDF · Final', type: 'pdf', viewHref: '#', downloadHref: '#' },
-      { name: 'Investment Summary — Power-Ready Land for the AI Supercycle', meta: 'DOCX · Overview', type: 'docx', downloadHref: '#' },
+      {
+        name: 'BSLA Term Sheet',
+        meta: 'PDF · Final',
+        type: 'pdf',
+        viewHref: '/docs/bsla-term-sheet.pdf',
+        downloadHref: '/docs/bsla-term-sheet.pdf',
+      },
+      {
+        name: 'Investment Summary — Power-Ready Land for the AI Supercycle',
+        meta: 'DOCX · Overview',
+        type: 'docx',
+        downloadHref: '/docs/investment-summary.docx',
+      },
     ],
   },
   {
@@ -49,36 +95,88 @@ const categories: Category[] = [
     num: '04',
     title: 'Financial Model',
     documents: [
-      { name: 'Big Star Land Acquisition Model v11.3', meta: 'XLSX · Financial Model', type: 'xlsx', downloadHref: '#' },
-      { name: 'Financial Model Overview for Investors', meta: 'DOCX · Narrative Guide', type: 'docx', downloadHref: '#' },
+      {
+        name: 'Big Star Land Acquisition Model v11.3',
+        meta: 'XLSX · Financial Model',
+        type: 'xlsx',
+        downloadHref: '/docs/financial-model-v11.3.xlsx',
+      },
+      {
+        name: 'Financial Model Overview for Investors',
+        meta: 'DOCX · Narrative Guide',
+        type: 'docx',
+        downloadHref: '/docs/financial-model-overview.docx',
+      },
     ],
   },
   {
     key: 'pipeline',
     num: '05',
     title: 'Asset Pipeline',
-    documents: [{ name: 'BSLA — Energy Ready Sites', meta: 'PDF · Pipeline Overview', type: 'pdf', viewHref: '#', downloadHref: '#' }],
+    documents: [
+      {
+        name: 'BSLA — Energy Ready Sites',
+        meta: 'PDF · Pipeline Overview',
+        type: 'pdf',
+        viewHref: '/docs/energy-ready-sites.pdf',
+        downloadHref: '/docs/energy-ready-sites.pdf',
+      },
+    ],
   },
   {
     key: 'corporate',
     num: '06',
     title: 'Corporate Documents',
     documents: [
-      { name: 'LLC Articles / Certificate of Organization', meta: 'PDF · Formation', type: 'pdf', viewHref: '#', downloadHref: '#' },
-      { name: 'Operating Agreement — BSLA, LLC', meta: 'PDF · Corporate', type: 'pdf', viewHref: '#', downloadHref: '#' },
+      {
+        name: 'LLC Articles / Certificate of Organization',
+        meta: 'PDF · Formation',
+        type: 'pdf',
+        viewHref: '/docs/llc-articles.pdf',
+        downloadHref: '/docs/llc-articles.pdf',
+      },
+      {
+        name: 'Operating Agreement — BSLA, LLC',
+        meta: 'PDF · Corporate',
+        type: 'pdf',
+        viewHref: '/docs/operating-agreement.pdf',
+        downloadHref: '/docs/operating-agreement.pdf',
+      },
     ],
   },
-  { key: 'team', num: '07', title: 'Management & Team', documents: [{ name: 'Management & Leadership Team', meta: 'DOCX · Team Bios', type: 'docx', downloadHref: '#' }] },
+  {
+    key: 'team',
+    num: '07',
+    title: 'Management & Team',
+    documents: [
+      {
+        name: 'Management & Leadership Team',
+        meta: 'DOCX · Team Bios',
+        type: 'docx',
+        downloadHref: '/docs/management-team.docx',
+      },
+    ],
+  },
   {
     key: 'market',
     num: '08',
     title: 'Market Validation & Industry Research',
     navTitle: 'Market Validation',
-    documents: [{ name: 'BSLA Market Validation', meta: 'PDF · Research', type: 'pdf', viewHref: '#', downloadHref: '#' }],
+    documents: [
+      {
+        name: 'BSLA Market Validation',
+        meta: 'PDF · Research',
+        type: 'pdf',
+        viewHref: '/docs/market-validation.pdf',
+        downloadHref: '/docs/market-validation.pdf',
+      },
+    ],
   },
 ];
 
 function DocumentCard({ doc }: { doc: DocumentItem }) {
+  const isPdf = doc.type === 'pdf';
+
   return (
     <div className="dr-doc-card">
       <div className={`dr-doc-icon ${doc.type}`}><span className="dr-doc-icon-label">{doc.type.toUpperCase()}</span></div>
@@ -87,8 +185,14 @@ function DocumentCard({ doc }: { doc: DocumentItem }) {
         <div className="dr-doc-meta">{doc.meta}</div>
       </div>
       <div className="dr-doc-actions">
-        {doc.viewHref && <a href={doc.viewHref} className="dr-doc-btn dr-doc-btn-view">View</a>}
-        <a href={doc.downloadHref || '#'} className="dr-doc-btn dr-doc-btn-dl">Download</a>
+        {isPdf && doc.viewHref && (
+          <a href={doc.viewHref} target="_blank" rel="noopener noreferrer" className="dr-doc-btn dr-doc-btn-view">
+            View
+          </a>
+        )}
+        <a href={doc.downloadHref || '#'} download className="dr-doc-btn dr-doc-btn-dl">
+          Download
+        </a>
       </div>
     </div>
   );
@@ -124,7 +228,9 @@ export default function RoomClient() {
           </div>
 
           <div className="dr-contact-card">
-            <div className="dr-contact-photo" aria-label="Cecil Robles portrait" role="img" />
+            <div className="dr-contact-photo" aria-label="Cecil Robles portrait" role="img">
+              <img src="/cecil-headshot.jpg" alt="Cecil Robles" />
+            </div>
             <div className="dr-contact-body">
               <div className="dr-contact-name">Cecil Robles</div>
               <div className="dr-contact-role">CRO</div>
