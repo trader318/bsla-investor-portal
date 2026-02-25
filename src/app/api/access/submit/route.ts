@@ -72,7 +72,7 @@ async function upsertGhlContact(payload: Required<Pick<AccessPayload, 'name' | '
       customFields: [
         { key: 'accreditationBasis', field_value: payload.accreditationBasis },
         { key: 'investmentRange', field_value: payload.investmentRange },
-        { key: 'commitment_amount', field_value: payload.investmentRange },
+        { key: 'commitment_ammount_2', field_value: payload.investmentRange },
         { key: 'source', field_value: payload.source || '' },
         { key: 'notes', field_value: payload.notes || '' },
         { key: 'ndaAccepted', field_value: String(payload.ndaAccepted) },
