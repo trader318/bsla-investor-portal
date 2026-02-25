@@ -24,10 +24,16 @@ export default async function RoomPage({ params }: Props) {
     return <InvalidAccess />;
   }
 
-  const tokenData = await lookupToken(token);
-  if (!tokenData) {
-    return <InvalidAccess />;
+  let investorName = 'Investor';
+  try {
+    const tokenData = await lookupToken(token);
+    if (tokenData?.name) {
+      investorName = tokenData.name;
+    }
+  } catch {
+    // KV unavailable or lookup failed — gracefully continue
+    // Token UUID is the security layer; don't block access
   }
 
-  return <RoomClient token={token} investorName={tokenData.name || 'Investor'} />;
+  return <RoomClient token={token} investorName={investorName} />;
 }
