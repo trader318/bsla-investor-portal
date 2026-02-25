@@ -221,6 +221,26 @@ export async function POST(request: Request) {
     const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_BASE_URL || 'https://bsla-investor-portal.vercel.app';
     const dealRoomUrl = `${appBaseUrl}/room/${rawToken}`;
 
+    // Write deal room URL to GHL custom field so Kevin can send it directly
+    if (ghl.ok && ghl.contactId) {
+      const ghlApiKey = process.env.GHL_API_KEY;
+      if (ghlApiKey) {
+        await fetch(`https://services.leadconnectorhq.com/contacts/${ghl.contactId}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${ghlApiKey}`,
+            'Content-Type': 'application/json',
+            Version: '2021-07-28',
+          },
+          body: JSON.stringify({
+            customFields: [
+              { key: 'deal_room_link', field_value: dealRoomUrl },
+            ],
+          }),
+        }).catch(() => { /* non-blocking */ });
+      }
+    }
+
     const emailResult = await sendAccessEmail({
       email: normalizedEmail,
       name: normalizedName,
