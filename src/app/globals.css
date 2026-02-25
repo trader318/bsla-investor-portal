@@ -137,3 +137,85 @@ footer{background:var(--navy);padding:48px 0;border-top:1px solid var(--border-d
   .cta-trust{flex-direction:column;gap:8px}
   .hero-case-row{flex-wrap:wrap}
 }
+
+/* ===== ACCESS PAGE (reference opt-in flow) ===== */
+.access-page{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+.access-page .btn-p{font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--navy);background:var(--gold);border:none;padding:14px 32px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .3s;flex:1;text-align:center}
+.access-page .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,165,78,.3)}
+.access-page .btn-p:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.access-nav{position:static;padding:20px 0;border-bottom:1px solid var(--border-dark)}
+.access-nav-inner{max-width:1200px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
+.access-nav-wm{text-decoration:none;display:flex;flex-direction:column;line-height:1}
+.access-nav-wm-top{font-family:'Fraunces',serif;font-size:20px;font-weight:800;color:var(--white);text-transform:uppercase;letter-spacing:-.5px}
+.access-nav-wm-bot{font-family:'Fraunces',serif;font-size:8px;font-weight:500;color:var(--slate-light);text-transform:uppercase;letter-spacing:4.5px}
+.access-nav-badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,165,78,.25);padding:5px 14px}
+.access-main{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 48px;position:relative;overflow:hidden}
+.access-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,165,78,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(201,165,78,.015) 1px,transparent 1px);background-size:80px 80px;pointer-events:none}
+.access-bg-orb{position:absolute;width:500px;height:500px;border-radius:50%;background:var(--gold);filter:blur(200px);opacity:.03;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.access-gate{position:relative;z-index:2;width:100%;max-width:520px;animation:fadeUp .6s ease both}
+.access-gate-label{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;text-align:center}
+.access-gate h1{font-family:'Fraunces',serif;font-size:36px;font-weight:800;text-align:center;letter-spacing:-.5px;margin-bottom:8px}
+.access-gate-sub{font-size:15px;color:var(--slate-light);text-align:center;line-height:1.6;margin-bottom:40px}
+.access-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:40px}
+.access-step{display:flex;align-items:center;gap:0}
+.access-step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;transition:all .4s;border:1px solid rgba(201,165,78,.2);color:var(--slate);background:transparent}
+.access-step-dot.active{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.access-step-dot.done{background:var(--positive);color:var(--navy);border-color:var(--positive)}
+.access-step-line{width:48px;height:1px;background:rgba(201,165,78,.15);margin:0 4px}
+.access-step-line.active{background:var(--gold)}
+.access-step-line.done{background:var(--positive)}
+.access-form-card{background:rgba(26,32,53,.6);border:1px solid rgba(201,165,78,.1);overflow:hidden;animation:pulse 4s ease-in-out infinite}
+.access-form-card-bar{height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold))}
+.access-form-card-header{padding:20px 32px;border-bottom:1px solid var(--border-dark);display:flex;justify-content:space-between;align-items:center}
+.access-form-card-step{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--slate)}
+.access-form-card-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--white)}
+.access-form-body{padding:32px}
+.access-field{margin-bottom:20px}
+.access-field:last-of-type{margin-bottom:0}
+.access-field label{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:8px}
+.access-field label .req{color:var(--gold)}
+.access-optional{opacity:.4}
+.access-field input,.access-field select,.access-field textarea{width:100%;background:rgba(10,14,26,.6);border:1px solid rgba(201,165,78,.1);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 16px;outline:none;transition:all .3s}
+.access-field input::placeholder,.access-field textarea::placeholder{color:var(--slate);opacity:.5}
+.access-field input:focus,.access-field select:focus,.access-field textarea:focus{border-color:rgba(201,165,78,.4);box-shadow:0 0 0 3px rgba(201,165,78,.08)}
+.access-field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;cursor:pointer}
+.access-field select option{background:var(--navy);color:var(--white)}
+.access-field textarea{resize:vertical;min-height:80px}
+.access-check-field{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
+.access-check-field input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--gold);cursor:pointer;flex-shrink:0}
+.access-check-field label{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--slate-light);line-height:1.5;cursor:pointer;letter-spacing:0;text-transform:none}
+.access-form-actions{display:flex;gap:12px;margin-top:28px}
+.access-btn-back{font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--slate);background:transparent;border:1px solid rgba(148,163,184,.2);padding:14px 24px;cursor:pointer;transition:all .3s;text-align:center}
+.access-btn-back:hover{border-color:rgba(148,163,184,.4);color:var(--white)}
+.access-step-panel{display:block;animation:fadeUp .4s ease both}
+.access-success{text-align:center;padding:48px 32px}
+.access-success-icon{width:64px;height:64px;border-radius:50%;background:rgba(52,211,153,.1);border:2px solid var(--positive);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:24px}
+.access-success h3{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:12px}
+.access-success p{font-size:14px;color:var(--slate-light);line-height:1.6;max-width:360px;margin:0 auto}
+.access-success-btn{margin-top:24px}
+.access-inside{margin-top:32px}
+.access-inside-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--slate);margin-bottom:16px;text-align:center}
+.access-inside-items{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.access-inside-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid rgba(201,165,78,.06);background:rgba(26,32,53,.3);font-size:12px;color:var(--slate-light)}
+.access-inside-item .lock{font-size:10px;opacity:.4}
+.access-back-link{text-align:center;margin-top:24px}
+.access-back-link a{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);text-decoration:none;transition:color .3s}
+.access-back-link a:hover{color:var(--gold)}
+.access-footer{background:var(--navy);padding:32px 0;border-top:1px solid var(--border-dark)}
+.access-ft-inner{max-width:1200px;margin:0 auto;padding:0 48px}
+.access-ft-disc{font-size:10px;line-height:1.7;color:rgba(148,163,184,.3);max-width:800px}
+.access-ft-bot{margin-top:16px;display:flex;justify-content:space-between}
+.access-ft-copy{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(148,163,184,.25)}
+.access-error{font-size:12px;color:#fda4af;margin-top:8px}
+@media(max-width:768px){
+  .access-main{padding:40px 24px}
+  .access-gate h1{font-size:28px}
+  .access-form-body{padding:24px}
+  .access-inside-items{grid-template-columns:1fr}
+  .access-form-actions{flex-direction:column}
+  .access-nav-inner{padding:0 24px}
+  .access-ft-inner{padding:0 24px}
+  .access-nav-badge{display:none}
+  .access-ft-bot{flex-direction:column;gap:8px}
+}
+

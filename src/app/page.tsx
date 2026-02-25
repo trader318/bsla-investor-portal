@@ -36,7 +36,7 @@ export default function HomePage() {
           </a>
           <div className="nav-right">
             <span className="nav-badge">Accredited Investors Only</span>
-            <a href="#access" className="nav-cta">Request Access</a>
+            <a href="/access" className="nav-cta">Request Access</a>
           </div>
         </div>
       </nav>
@@ -51,7 +51,7 @@ export default function HomePage() {
             <h1>Power-Ready Sites for <em>AI's Future</em></h1>
             <p className="hero-sub">We acquire land with guaranteed ultra-low-cost power access, then flip at a massive premium or partner for long-term revenue. $180K to $1M+ per megawatt exit multiples.</p>
             <div className="hero-ctas">
-              <a href="#access" className="btn-p">Request Deal Room</a>
+              <a href="/access" className="btn-p">Request Deal Room</a>
               <a href="#terms" className="btn-o">View Terms</a>
             </div>
 
@@ -113,7 +113,7 @@ export default function HomePage() {
               <span className="ts-val">Accredited Investors Only</span>
             </div>
             <div className="ts-cta">
-              <a href="#access" className="btn-p">Request Deal Room</a>
+              <a href="/access" className="btn-p">Request Deal Room</a>
               <a href="#" className="btn-o">Download Term Sheet</a>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function HomePage() {
           <div className="sl reveal">Next Steps</div>
           <h2 className="reveal">Ready to Review the Opportunity?</h2>
           <p className="reveal">Access complete investment materials, financial projections, and due diligence documentation in our private deal room.</p>
-          <a href="#" className="btn-p reveal">Request Deal Room Access</a>
+          <a href="/access" className="btn-p reveal">Request Deal Room Access</a>
           <div className="cta-trust reveal">
             <span>Accredited Investors Only</span>
             <span>All Materials Under NDA</span>
