@@ -18,6 +18,7 @@ const HIGH_INTENT_DOCS = new Set([
   'convertible-promissory-note',
   'wire-instructions',
   'bsla-term-sheet',
+  'invest-now-docusign',
 ]);
 
 const TAG_BY_DOC_ID: Record<string, string> = {
@@ -26,6 +27,7 @@ const TAG_BY_DOC_ID: Record<string, string> = {
   'convertible-promissory-note': 'activity:viewed-convertible-promissory-note',
   'wire-instructions': 'activity:viewed-wire-instructions',
   'bsla-term-sheet': 'activity:viewed-term-sheet',
+  'invest-now-docusign': 'activity:clicked-invest-now',
 };
 
 function toCentralTimeLabel(input?: string) {
