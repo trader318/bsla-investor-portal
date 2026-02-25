@@ -229,15 +229,12 @@ function DocumentCard({ doc, onTrack }: { doc: DocumentItem; onTrack: (doc: Docu
       </div>
       <div className="dr-doc-actions">
         {isPdf && doc.viewHref && (
-          <a
-            href={`/view/${doc.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
             className="dr-doc-btn dr-doc-btn-view"
-            onClick={() => onTrack(doc, 'view')}
+            onClick={(e) => { e.preventDefault(); onTrack(doc, 'view'); window.open(`/view/${doc.id}`, '_blank'); }}
           >
             View
-          </a>
+          </button>
         )}
         {canDownload && (
           <a

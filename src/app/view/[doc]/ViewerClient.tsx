@@ -57,7 +57,7 @@ export default function ViewerClient({ pdfPath, docName }: { pdfPath: string; do
           Confidential · Do Not Distribute
         </span>
         <button
-          onClick={() => { try { window.close(); } catch { /* */ } history.back(); }}
+          onClick={() => { window.close(); window.history.back(); }}
           style={{
             color: 'rgba(201,165,78,.7)',
             background: 'transparent',
