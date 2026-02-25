@@ -305,14 +305,14 @@ footer{background:var(--navy);padding:48px 0;border-top:1px solid var(--border-d
 
 @media(max-width:1024px){
   .dr-layout{grid-template-columns:1fr;grid-template-rows:56px auto 1fr}
-  .dr-sidebar{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border-dark);padding:12px 16px;gap:8px;align-items:center}
+  .dr-sidebar{grid-row:2;grid-column:1;flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border-dark);padding:12px 16px;gap:8px;align-items:center}
   .dr-sidebar-section{padding:0;display:flex;gap:4px;align-items:center}
   .dr-sidebar-section-label{display:none}
   .dr-sidebar-nav{display:flex;flex-direction:row;gap:6px;padding:0}
   .dr-nav-item{white-space:nowrap;padding:8px 12px}
   .dr-contact-card{display:none}
   .dr-nav-count{display:none}
-  .dr-main{padding:24px}
+  .dr-main{grid-row:3;grid-column:1;padding:24px;overflow-y:auto}
 }
 
 @media(max-width:768px){
