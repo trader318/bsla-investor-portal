@@ -179,17 +179,9 @@ export async function POST(request: Request) {
     const isHighIntentView = action === 'view' && HIGH_INTENT_DOCS.has(documentId);
 
     if (isEntryEvent) {
-      const msg = `🏦 *DEAL ROOM ENTRY*\n\n${investorIdentifier} just entered the deal room\n\nTime: ${timestampCt}`;
-      await sendTelegramMessage(
-        `🏦 DEAL ROOM ENTRY\n\n${investorIdentifier} just entered the deal room\n\nTime: ${timestampCt}\nDeal Room: /room/${token}`,
-      );
-      await sendSlackMessage(msg, ':door:');
+      await sendSlackMessage(`🏦 *DEAL ROOM ENTRY*\n\n${investorIdentifier} just entered the deal room\n\nTime: ${timestampCt}`, ':door:');
     } else if (isHighIntentView) {
-      const msg = `🔥 *INVESTOR ALERT*\n\n${investorIdentifier} just viewed *${documentName}*\n\nTime: ${timestampCt}`;
-      await sendTelegramMessage(
-        `🔥 INVESTOR ALERT\n\n${investorIdentifier} just viewed ${documentName}\n\nTime: ${timestampCt}\nDeal Room: /room/${token}`,
-      );
-      await sendSlackMessage(msg, ':fire:');
+      await sendSlackMessage(`🔥 *INVESTOR ALERT*\n\n${investorIdentifier} just viewed *${documentName}*\n\nTime: ${timestampCt}`, ':fire:');
     }
 
     return NextResponse.json({ ok: true });
