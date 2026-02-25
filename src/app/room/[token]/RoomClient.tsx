@@ -357,6 +357,16 @@ export default function RoomClient({ token, investorName }: { token: string; inv
                   <div><div className="dr-welcome-stat-val">{totalDocs}</div><div className="dr-welcome-stat-label">Documents</div></div>
                   <div><div className="dr-welcome-stat-val">{categories.length}</div><div className="dr-welcome-stat-label">Categories</div></div>
                 </div>
+                <div className="dr-welcome-ctas">
+                  <a href="https://go.bigstarblockchain.com/widget/bookings/big-star-land-acquisition-investor-call" target="_blank" rel="noopener noreferrer" className="dr-welcome-btn-outline">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                    Book a Call
+                  </a>
+                  <a href="https://apps.docusign.com/webforms/us/b73d8cb58b381f5b32717ba4c562b756" target="_blank" rel="noopener noreferrer" className="dr-welcome-btn-primary" onClick={() => sendTracking({ documentId: 'invest-now-docusign', documentName: 'Invest Now (DocuSign)', action: 'view' })}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
+                    Invest Now
+                  </a>
+                </div>
               </div>
             </div>
           )}
