@@ -252,7 +252,7 @@ footer{background:var(--navy);padding:48px 0;border-top:1px solid var(--border-d
 .dr-nav-item.active .dr-nav-text{color:#FFF;font-weight:600}
 .dr-nav-count{font-family:var(--font-jetbrains-mono),monospace;font-size:9px;color:var(--slate);margin-left:auto;flex-shrink:0}
 
-.dr-contact-card{margin:auto 12px 8px;background:rgba(26,32,53,.6);border:1px solid var(--border-dark);overflow:hidden}
+.dr-contact-card{margin:24px 12px 8px;background:rgba(26,32,53,.6);border:1px solid var(--border-dark);overflow:hidden}
 .dr-contact-photo{width:100%;height:120px;display:block;position:relative;overflow:hidden;background:linear-gradient(130deg,#2b3248,#1a2035)}
 .dr-contact-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;filter:grayscale(.3)}
 .dr-contact-body{padding:14px}
