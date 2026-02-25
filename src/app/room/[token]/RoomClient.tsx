@@ -26,7 +26,15 @@ const categories: Category[] = [
     key: 'deck',
     num: '01',
     title: 'Deck',
-    documents: [{ name: 'Big Star Land Acquisition — Investor Deck', meta: 'PDF · Final Version', type: 'pdf', viewHref: '#', downloadHref: '#' }],
+    documents: [
+      {
+        name: 'Big Star Land Acquisition — Investor Deck',
+        meta: 'PDF · Final Version',
+        type: 'pdf',
+        viewHref: '/docs/investor-deck.pdf',
+        downloadHref: '/docs/investor-deck.pdf',
+      },
+    ],
   },
   {
     key: 'offering',
