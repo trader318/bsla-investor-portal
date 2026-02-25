@@ -157,7 +157,16 @@ export async function POST(request: Request) {
 
     const tokenData = token ? await lookupToken(token) : null;
     const email = tokenData?.email || '';
-    const investorIdentifier = email || 'Unknown investor';
+    const investorName = tokenData?.name || '';
+    const investorPhone = tokenData?.phone || '';
+    const investorCompany = tokenData?.company || '';
+    const investorIdentifier = investorName || email || 'Unknown investor';
+    const investorBlock = [
+      investorName ? `*${investorName}*` : null,
+      email || null,
+      investorPhone || null,
+      investorCompany || null,
+    ].filter(Boolean).join('\n');
 
     let contactId = tokenData?.ghlContactId;
     if (!contactId && email) {
@@ -179,9 +188,9 @@ export async function POST(request: Request) {
     const isHighIntentView = action === 'view' && HIGH_INTENT_DOCS.has(documentId);
 
     if (isEntryEvent) {
-      await sendSlackMessage(`🏦 *DEAL ROOM ENTRY*\n\n${investorIdentifier} just entered the deal room\n\nTime: ${timestampCt}`, ':door:');
+      await sendSlackMessage(`🏦 *DEAL ROOM ENTRY*\n\n${investorBlock}\n\nTime: ${timestampCt}`, ':door:');
     } else if (isHighIntentView) {
-      await sendSlackMessage(`🔥 *INVESTOR ALERT*\n\n${investorIdentifier} just viewed *${documentName}*\n\nTime: ${timestampCt}`, ':fire:');
+      await sendSlackMessage(`🔥 *INVESTOR ALERT*\n\n${investorBlock}\n\nViewed: *${documentName}*\nTime: ${timestampCt}`, ':fire:');
     }
 
     return NextResponse.json({ ok: true });
