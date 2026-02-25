@@ -28,7 +28,7 @@ export default function HomePage() {
   return (
     <>
       {/* Nav */}
-      <nav className="nav--p0-mobilefix-v2">
+      <nav className="site-nav">
         <div className="nav-inner">
           <a href="#" className="nav-wm">
             <span className="nav-wm-top">BIGSTAR</span>

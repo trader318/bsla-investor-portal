@@ -20,7 +20,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);-webkit-font-smoot
 @keyframes pulse{0%,100%{box-shadow:0 0 30px rgba(201,165,78,.05)}50%{box-shadow:0 0 60px rgba(201,165,78,.15)}}
 
 /* Nav */
-.site-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:24px 0;transition:all .4s;background:rgba(10,14,26,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:28px 0;transition:all .4s;background:rgba(10,14,26,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .site-nav.scrolled{background:rgba(10,14,26,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border-dark);padding:14px 0}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between}
 .nav-wm{text-decoration:none;display:flex;flex-direction:column;line-height:1}
