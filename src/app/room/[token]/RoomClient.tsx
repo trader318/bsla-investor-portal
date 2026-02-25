@@ -230,7 +230,7 @@ function DocumentCard({ doc, onTrack }: { doc: DocumentItem; onTrack: (doc: Docu
       <div className="dr-doc-actions">
         {isPdf && doc.viewHref && (
           <a
-            href={`${doc.viewHref}#toolbar=0&navpanes=0`}
+            href={`/view/${doc.id}`}
             target="_blank"
             rel="noopener noreferrer"
             className="dr-doc-btn dr-doc-btn-view"
