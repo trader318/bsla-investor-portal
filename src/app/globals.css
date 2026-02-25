@@ -233,6 +233,11 @@ footer{background:var(--navy);padding:48px 0;border-top:1px solid var(--border-d
 .dr-topbar-user{font-family:var(--font-dm-sans),sans-serif;font-size:13px;color:var(--slate-light)}
 .dr-topbar-badge{font-family:var(--font-jetbrains-mono),monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--positive);border:1px solid rgba(52,211,153,.25);padding:3px 10px;display:flex;align-items:center;gap:5px}
 .dr-topbar-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--positive);display:block}
+.dr-topbar-btn{font-family:var(--font-dm-sans),sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:7px 16px;text-decoration:none;transition:all .2s;cursor:pointer}
+.dr-topbar-btn-book{color:var(--gold);border:1px solid rgba(201,165,78,.3);background:transparent}
+.dr-topbar-btn-book:hover{border-color:var(--gold);background:rgba(201,165,78,.1)}
+.dr-topbar-btn-invest{color:var(--navy);background:var(--gold);border:1px solid var(--gold)}
+.dr-topbar-btn-invest:hover{box-shadow:0 2px 8px rgba(201,165,78,.3)}
 
 .dr-sidebar{grid-row:2;background:var(--navy);border-right:1px solid var(--border-dark);display:flex;flex-direction:column;overflow-y:auto;padding-bottom:24px;height:calc(100vh - 56px)}
 .dr-sidebar-section{padding:20px 16px 8px}
@@ -327,6 +332,7 @@ footer{background:var(--navy);padding:48px 0;border-top:1px solid var(--border-d
   .dr-topbar-divider{display:none}
   .dr-topbar-user{display:none}
   .dr-topbar-badge{font-size:7px;padding:3px 8px}
+  .dr-topbar-btn{display:none}
   .dr-main{padding:16px}
   .dr-welcome{padding:24px}
   .dr-welcome h2{font-size:20px}

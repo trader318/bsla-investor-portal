@@ -298,7 +298,7 @@ export default function RoomClient({ token, investorName }: { token: string; inv
             <div className="dr-topbar-divider" />
             <span className="dr-topbar-label">Private Deal Room</span>
           </div>
-          <div className="dr-topbar-right"><span className="dr-topbar-user">Welcome, <strong>{investorName}</strong></span><span className="dr-topbar-badge">Verified · Accredited</span></div>
+          <div className="dr-topbar-right"><span className="dr-topbar-user">Welcome, <strong>{investorName}</strong></span><span className="dr-topbar-badge">Verified · Accredited</span><a href="https://go.bigstarblockchain.com/widget/bookings/big-star-land-acquisition-investor-call" target="_blank" rel="noopener noreferrer" className="dr-topbar-btn dr-topbar-btn-book">Book a Call</a><a href="/access" className="dr-topbar-btn dr-topbar-btn-invest">Invest Now</a></div>
         </div>
 
         <aside className="dr-sidebar">
