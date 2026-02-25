@@ -12,7 +12,7 @@ type AccessForm = {
   source: string;
   notes: string;
   ndaAccepted: boolean;
-  accredConfirmed: boolean;
+  accreditationConfirmed: boolean;
   riskAccepted: boolean;
 };
 
@@ -26,7 +26,7 @@ const initialState: AccessForm = {
   source: '',
   notes: '',
   ndaAccepted: false,
-  accredConfirmed: false,
+  accreditationConfirmed: false,
   riskAccepted: false,
 };
 
@@ -46,7 +46,7 @@ export default function AccessPage() {
     [formData],
   );
   const step3Valid = useMemo(
-    () => formData.ndaAccepted && formData.accredConfirmed && formData.riskAccepted,
+    () => formData.ndaAccepted && formData.accreditationConfirmed && formData.riskAccepted,
     [formData],
   );
 
@@ -63,19 +63,19 @@ export default function AccessPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/access', {
+      const response = await fetch('/api/access/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
       const json = (await response.json()) as {
-        success?: boolean;
+        ok?: boolean;
         dealRoomUrl?: string;
-        error?: string;
+        message?: string;
       };
 
-      if (!response.ok || !json.success || !json.dealRoomUrl) {
-        throw new Error(json.error || 'Unable to submit request');
+      if (!response.ok || !json.ok || !json.dealRoomUrl) {
+        throw new Error(json.message || 'Unable to submit request');
       }
 
       setDealRoomUrl(json.dealRoomUrl);
@@ -213,7 +213,7 @@ export default function AccessPage() {
                     <label htmlFor="nda">I acknowledge that the materials in the deal room are confidential and proprietary. I agree to treat all information as strictly confidential and will not share, distribute, or disclose any materials without written consent from BSLA, LLC.</label>
                   </div>
                   <div className="access-check-field">
-                    <input type="checkbox" id="accred-confirm" checked={formData.accredConfirmed} onChange={(e) => setFormData((p) => ({ ...p, accredConfirmed: e.target.checked }))} />
+                    <input type="checkbox" id="accred-confirm" checked={formData.accreditationConfirmed} onChange={(e) => setFormData((p) => ({ ...p, accreditationConfirmed: e.target.checked }))} />
                     <label htmlFor="accred-confirm">I confirm that I meet the definition of an "accredited investor" as defined in Rule 501 of Regulation D under the Securities Act of 1933, and I understand that verification may be required.</label>
                   </div>
                   <div className="access-check-field">
