@@ -112,21 +112,40 @@ async function addContactTags(contactId: string, tags: string[]) {
 
 async function sendSlackMessage(text: string, emoji: string) {
   const botToken = process.env.SLACK_BOT_TOKEN;
-  if (!botToken) return;
+  if (!botToken) {
+    console.error('sendSlackMessage: SLACK_BOT_TOKEN missing');
+    return;
+  }
 
-  await fetch('https://slack.com/api/chat.postMessage', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${botToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      channel: 'deal-room-access',
-      text,
-      icon_emoji: emoji,
-      unfurl_links: false,
-    }),
-  }).catch(() => { /* non-blocking */ });
+  try {
+    const response = await fetch('https://slack.com/api/chat.postMessage', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${botToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        channel: 'deal-room-access',
+        text,
+        icon_emoji: emoji,
+        unfurl_links: false,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('sendSlackMessage: HTTP error:', response.status, await response.text());
+      return;
+    }
+
+    const result = await response.json();
+    if (!result.ok) {
+      console.error('sendSlackMessage: Slack API error:', result);
+    } else {
+      console.log('sendSlackMessage: Success');
+    }
+  } catch (error) {
+    console.error('sendSlackMessage: Network error:', error);
+  }
 }
 
 async function sendTelegramMessage(text: string) {
@@ -155,18 +174,45 @@ export async function POST(request: Request) {
     const action = body.action?.trim() || 'view';
     const timestampCt = toCentralTimeLabel(body.timestamp);
 
+    console.log('track: Processing request:', { token: token ? `${token.substring(0, 8)}...` : 'none', documentId, action, timestamp: body.timestamp });
+
     const tokenData = token ? await lookupToken(token) : null;
-    const email = tokenData?.email || '';
-    const investorName = tokenData?.name || '';
+    console.log('track: Token lookup result:', { 
+      token: token ? `${token.substring(0, 8)}...` : 'none',
+      found: !!tokenData,
+      data: tokenData ? { name: tokenData.name, email: tokenData.email, hasGhlId: !!tokenData.ghlContactId } : null
+    });
+
+    let email = tokenData?.email || '';
+    let investorName = tokenData?.name || '';
     const investorPhone = tokenData?.phone || '';
     const investorCompany = tokenData?.company || '';
-    const investorIdentifier = investorName || email || 'Unknown investor';
-    const investorBlock = [
+
+    // If tokenData is null but we have a token, try GHL lookup as fallback
+    // (This is a chicken-and-egg situation, but we can try a search approach)
+    if (!tokenData && token) {
+      console.log('track: TokenData null, attempting GHL fallback search for token:', `${token.substring(0, 8)}...`);
+      // Note: This is limited since we don't have the email from the token lookup
+      // But we include the token in the Slack message so Cecil can investigate
+    }
+
+    const investorIdentifier = investorName || email || `Token: ${token.substring(0, 8)}...` || 'Unknown investor';
+    
+    // Build investor block with fallback info
+    const investorParts = [
       investorName ? `*${investorName}*` : null,
       email || null,
       investorPhone || null,
       investorCompany || null,
-    ].filter(Boolean).join('\n');
+    ].filter(Boolean);
+    
+    // If no investor data found but we have a token, include it for debugging
+    if (investorParts.length === 0 && token) {
+      investorParts.push(`Token: \`${token}\``);
+      investorParts.push('⚠️ *Investor lookup failed*');
+    }
+    
+    const investorBlock = investorParts.join('\n');
 
     let contactId = tokenData?.ghlContactId;
     if (!contactId && email) {
@@ -188,9 +234,13 @@ export async function POST(request: Request) {
     const isHighIntentView = action === 'view' && HIGH_INTENT_DOCS.has(documentId);
 
     if (isEntryEvent) {
-      await sendSlackMessage(`🏦 *DEAL ROOM ENTRY*\n\n${investorBlock}\n\nTime: ${timestampCt}`, ':door:');
+      const slackMessage = `🏦 *DEAL ROOM ENTRY*\n\n${investorBlock}\n\nTime: ${timestampCt}`;
+      console.log('track: Sending Slack entry message:', { message: slackMessage, hasInvestorData: !!tokenData });
+      await sendSlackMessage(slackMessage, ':door:');
     } else if (isHighIntentView) {
-      await sendSlackMessage(`🔥 *INVESTOR ALERT*\n\n${investorBlock}\n\nViewed: *${documentName}*\nTime: ${timestampCt}`, ':fire:');
+      const slackMessage = `🔥 *INVESTOR ALERT*\n\n${investorBlock}\n\nViewed: *${documentName}*\nTime: ${timestampCt}`;
+      console.log('track: Sending Slack alert message:', { message: slackMessage, hasInvestorData: !!tokenData });
+      await sendSlackMessage(slackMessage, ':fire:');
     }
 
     // Non-blocking mirror to Mission Control analytics webhook
