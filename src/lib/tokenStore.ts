@@ -33,8 +33,8 @@ export async function storeToken(token: string, data: TokenData) {
     }
     
     // Basic validation
-    if (typeof parsed === 'object' && parsed.email !== data.email) {
-      console.error('storeToken: Verification failed - retrieved data mismatch:', token, { expected: data.email, got: parsed.email });
+    if (typeof parsed === 'object' && parsed && 'email' in parsed && (parsed as TokenData).email !== data.email) {
+      console.error('storeToken: Verification failed - retrieved data mismatch:', token, { expected: data.email, got: (parsed as TokenData).email });
       throw new Error('Token verification failed - data mismatch');
     }
     
