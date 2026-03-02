@@ -10,8 +10,39 @@ export interface TokenData {
 }
 
 export async function storeToken(token: string, data: TokenData) {
-  await kv.set(`token:${token}`, JSON.stringify(data));
-  await kv.set(`email:${data.email}`, token);
+  try {
+    await kv.set(`token:${token}`, JSON.stringify(data));
+    await kv.set(`email:${data.email}`, token);
+    
+    // Verification step: read back and confirm the data persists
+    const verifyData = await kv.get(`token:${token}`);
+    if (!verifyData) {
+      console.error('storeToken: Verification failed - token data not found after write:', token);
+      throw new Error('Token verification failed - data not found after write');
+    }
+    
+    // Parse and validate if it's a string
+    let parsed = verifyData;
+    if (typeof verifyData === 'string') {
+      try {
+        parsed = JSON.parse(verifyData);
+      } catch (parseError) {
+        console.error('storeToken: Verification failed - cannot parse retrieved data:', token, parseError);
+        throw new Error('Token verification failed - cannot parse retrieved data');
+      }
+    }
+    
+    // Basic validation
+    if (typeof parsed === 'object' && parsed.email !== data.email) {
+      console.error('storeToken: Verification failed - retrieved data mismatch:', token, { expected: data.email, got: parsed.email });
+      throw new Error('Token verification failed - data mismatch');
+    }
+    
+    console.log('storeToken: Verification successful for token:', token);
+  } catch (error) {
+    console.error('storeToken: Failed to store/verify token:', token, error);
+    throw error;
+  }
 }
 
 export async function lookupToken(token: string): Promise<TokenData | null> {

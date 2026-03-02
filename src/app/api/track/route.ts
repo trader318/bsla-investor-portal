@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { lookupToken } from '@/lib/tokenStore';
+import { lookupToken, storeToken } from '@/lib/tokenStore';
 
 export const runtime = 'nodejs';
 
@@ -78,6 +78,91 @@ async function lookupContactByEmail(email: string) {
     name: contact?.name,
     email: contact?.email,
   };
+}
+
+async function lookupContactByToken(token: string): Promise<{
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+} | null> {
+  const ghlApiKey = process.env.GHL_API_KEY;
+  const ghlLocationId = process.env.GHL_LOCATION_ID;
+  if (!ghlApiKey || !ghlLocationId || !token) return null;
+
+  console.log('lookupContactByToken: Starting GHL reverse lookup for token:', `${token.substring(0, 8)}...`);
+
+  try {
+    // Search for contacts that have this token in their deal_room_link custom field
+    const searchUrl = `https://services.leadconnectorhq.com/contacts/search?locationId=${ghlLocationId}&query=${encodeURIComponent(token)}&limit=10`;
+    
+    const response = await fetch(searchUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${ghlApiKey}`,
+        'Content-Type': 'application/json',
+        Version: '2021-07-28',
+      },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      console.error('lookupContactByToken: GHL search API failed:', response.status, await response.text());
+      return null;
+    }
+
+    const data = await response.json() as {
+      contacts?: Array<{
+        id: string;
+        firstName?: string;
+        lastName?: string;
+        name?: string;
+        email?: string;
+        phone?: string;
+        companyName?: string;
+        customFields?: Array<{
+          key?: string;
+          field_value?: string;
+          value?: string;
+        }>;
+      }>;
+    };
+
+    const contacts = data.contacts || [];
+    console.log(`lookupContactByToken: Found ${contacts.length} contacts from search`);
+
+    // Filter contacts that actually have this token in their deal_room_link field
+    for (const contact of contacts) {
+      if (!contact.customFields) continue;
+
+      const dealRoomField = contact.customFields.find(field => 
+        field.key === 'deal_room_link' || 
+        field.key === 'Ykun48OFN4vJpgzs6Im2'
+      );
+
+      if (dealRoomField) {
+        const fieldValue = dealRoomField.field_value || dealRoomField.value || '';
+        if (fieldValue.includes(token)) {
+          console.log('lookupContactByToken: Found matching contact:', contact.id, contact.email);
+          return {
+            id: contact.id,
+            name: contact.name || `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || contact.email || 'Unknown',
+            email: contact.email || '',
+            phone: contact.phone,
+            company: contact.companyName,
+          };
+        }
+      }
+    }
+
+    console.log('lookupContactByToken: No matching contact found for token:', `${token.substring(0, 8)}...`);
+    return null;
+
+  } catch (error) {
+    console.error('lookupContactByToken: Error during GHL reverse lookup:', error);
+    return null;
+  }
 }
 
 async function addContactNote(contactId: string, note: string) {
@@ -176,25 +261,52 @@ export async function POST(request: Request) {
 
     console.log('track: Processing request:', { token: token ? `${token.substring(0, 8)}...` : 'none', documentId, action, timestamp: body.timestamp });
 
-    const tokenData = token ? await lookupToken(token) : null;
+    let tokenData = token ? await lookupToken(token) : null;
     console.log('track: Token lookup result:', { 
       token: token ? `${token.substring(0, 8)}...` : 'none',
       found: !!tokenData,
       data: tokenData ? { name: tokenData.name, email: tokenData.email, hasGhlId: !!tokenData.ghlContactId } : null
     });
 
+    // If both KV lookups failed but we have a token, try GHL reverse lookup
+    if (!tokenData && token) {
+      console.log('track: Both KV lookups failed, attempting GHL reverse lookup for token:', `${token.substring(0, 8)}...`);
+      
+      const ghlContact = await lookupContactByToken(token);
+      if (ghlContact) {
+        console.log('track: GHL reverse lookup succeeded, backfilling KV store');
+        
+        // Create TokenData object for storage
+        const backfillData = {
+          email: ghlContact.email,
+          name: ghlContact.name,
+          phone: ghlContact.phone,
+          company: ghlContact.company,
+          ghlContactId: ghlContact.id,
+          createdAt: new Date().toISOString(),
+        };
+        
+        try {
+          // Backfill the KV store so future lookups work instantly
+          await storeToken(token, backfillData);
+          console.log('track: Successfully backfilled KV store for token:', `${token.substring(0, 8)}...`);
+          
+          // Use the backfilled data
+          tokenData = backfillData;
+        } catch (backfillError) {
+          console.error('track: Failed to backfill KV store:', backfillError);
+          // Still use the GHL data even if backfill failed
+          tokenData = backfillData;
+        }
+      } else {
+        console.log('track: GHL reverse lookup also failed for token:', `${token.substring(0, 8)}...`);
+      }
+    }
+
     let email = tokenData?.email || '';
     let investorName = tokenData?.name || '';
     const investorPhone = tokenData?.phone || '';
     const investorCompany = tokenData?.company || '';
-
-    // If tokenData is null but we have a token, try GHL lookup as fallback
-    // (This is a chicken-and-egg situation, but we can try a search approach)
-    if (!tokenData && token) {
-      console.log('track: TokenData null, attempting GHL fallback search for token:', `${token.substring(0, 8)}...`);
-      // Note: This is limited since we don't have the email from the token lookup
-      // But we include the token in the Slack message so Cecil can investigate
-    }
 
     const investorIdentifier = investorName || email || `Token: ${token.substring(0, 8)}...` || 'Unknown investor';
     
